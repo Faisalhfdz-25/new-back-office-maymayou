@@ -42,7 +42,7 @@
                                         <td>{{ $item->alamat }}</td>
                                         <td>
                                             <a class="btn btn-sm btn-warning" href="javascript:void(0);" onclick="edit('{{ $item->id }}')">Edit</a>
-                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="delete('{{ $item->id }}')">Delete</a>
+                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -142,7 +142,7 @@
 @endsection
 @section('script')
     <script>
-        function delete(id) {
+        function hapus(id) {
             Swal.fire({
                 title: 'Yakin?',
                 text: "Mau menghapus Data ini!",

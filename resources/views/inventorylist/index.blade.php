@@ -39,9 +39,7 @@
                                     <th>QTY Min</th>
                                     <th>Merk</th>
                                     <th>Tempat</th>
-                                    <th>Produksi</th>
-                                    <th>Toko</th>
-                                    <th>Frozen</th>
+                                    <th>Penyaluran</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -50,16 +48,24 @@
                                     <tr>
                                         <td>{{ $item->kode }}</td>
                                         <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->jenis }}</td>
-                                        <td>{{ $item->penggunaan }}</td>
-                                        <td>{{ $item->kelas }}</td>
+                                        <td>{{ $item->jeniskategori->nama }}</td>
+                                        <td>{{ $item->penggunaanproduk->nama }}</td>
+                                        <td>{{ $item->kelasproduk->nama }}</td>
                                         <td>{{ $item->satuan }}</td>
                                         <td>{{ $item->qty_min }}</td>
                                         <td>{{ $item->merk }}</td>
-                                        <td>{{ $item->tempat }}</td>
-                                        <td>{{ $item->is_produksi }}</td>
-                                        <td>{{ $item->is_toko }}</td>
-                                        <td>{{ $item->is_frozen }}</td>
+                                        <td>{{ $item->supplier->nama }}</td>
+                                        <td>
+                                            @if ($item->is_produksi == 1)
+                                                <a class="btn btn-sm btn-outline-grape btn-round" href="javascript:void(0);">Produksi</a>
+                                            @endif
+                                            @if ($item->is_toko == 1)
+                                                <a class="btn btn-sm btn-outline-lemon btn-round" href="javascript:void(0);">Toko</a>
+                                            @endif
+                                            @if ($item->is_prozen == 1)
+                                                <a class="btn btn-sm btn-outline-azure btn-round" href="javascript:void(0);">Frozen</a>
+                                            @endif    
+                                        </td>
                                         <td>
                                             <a class="btn btn-sm btn-warning" href="/inventory-list/editview/{{ $item->id }}">Edit</a>
                                             <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a>
@@ -220,6 +226,7 @@
 @endsection
 @section('script')
     <script>
+
         function hapus(id) {
             Swal.fire({
                 title: 'Yakin?',
@@ -255,7 +262,7 @@
                 }
             })
         }
-    }
+    
     </script>
     @if(session('Save'))
         <script>

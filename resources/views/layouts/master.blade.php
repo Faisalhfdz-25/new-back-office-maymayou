@@ -428,11 +428,7 @@
         <div id="overlay"></div>
 
     </div> <!-- END WRAPPER -->
-    <script
-  src="https://code.jquery.com/jquery-3.7.1.js"
-  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-  crossorigin="anonymous"></script>
-    <script data-cfasync="false" src="cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/scripts/siqtheme.js') }}"></script>
     <script src="{{ asset('assets/vendors/bootstrap-select/bootstrap-select.min.js') }}"></script>
     <script src="{{ asset('assets/scripts/pages/fm_control.js') }}"></script>
