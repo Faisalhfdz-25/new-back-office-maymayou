@@ -62,13 +62,16 @@
                                             @if ($item->is_toko == 1)
                                                 <a class="btn btn-sm btn-outline-lemon btn-round" href="javascript:void(0);">Toko</a>
                                             @endif
-                                            @if ($item->is_prozen == 1)
+                                            @if ($item->is_frozen == 1)
                                                 <a class="btn btn-sm btn-outline-azure btn-round" href="javascript:void(0);">Frozen</a>
                                             @endif    
                                         </td>
                                         <td>
-                                            <a class="btn btn-sm btn-warning" href="/inventory-list/editview/{{ $item->id }}">Edit</a>
-                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a>
+                                            <a class="btn btn-sm btn-warning" href="/inventory-list/editview/{{ $item->id }}">Edit</a><br>
+                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a><br>
+                                            @if ($item->jenis == 9)
+                                                <a class="btn btn-sm btn-info" href="javascript:void(0);">Resep</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
