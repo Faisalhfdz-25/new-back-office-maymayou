@@ -6,6 +6,7 @@ use App\Models\Inventory;
 use App\Models\JenisKategori;
 use App\Models\KelasProduk;
 use App\Models\PenggunaanProduk;
+use App\Models\Resep;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -119,5 +120,39 @@ class InventoryListController extends Controller
             }
             $data->update();
         return redirect('/inventory-list')->with('Save','Data Berhasil Disimpan');
+    }
+
+    public function resep($id)
+    {
+        $data = Inventory::find($id);
+        $inventory = Inventory::all();
+        $resep = Resep::where('id_produk',$id)->get();
+        return view('inventorylist.resep',compact('data','resep','inventory'));
+    }
+    public function simpanresep(Request $request){
+        $data = new Resep();
+        $data->id_produk = $request->id_produk;
+        $data->id_inventory = $request->id_inventory;
+
+        $inventory = Inventory::find($request->id_inventory);
+        $data->satuan = $inventory->satuan;
+        $data->harga="";
+        $data->qty = $request->qty;
+        $data->save();
+        return redirect()->back()->with('Save','Data Berhasil Disimpan');
+
+    }
+
+    public function hapusresep(Request $request)
+    {
+        $data = Resep::where('id', $request->id)->first();
+        if (!$data) {
+            return 'false';
+        }
+        if ($data->delete()) {
+            return 'true';
+        } else {
+            return 'false';
+        }
     }
 }
