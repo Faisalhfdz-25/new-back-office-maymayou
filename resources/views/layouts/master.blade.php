@@ -157,6 +157,32 @@
                                 </ul>
                             </div>
                         </li>
+                        <hr width="80%">
+                        <li class="active">
+                            <a href="/gudang-purchase">
+                                <i class="ti-shopping-cart"></i>
+                                <span class="menu-text">Gudang Purchase</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="/gudang-produksi">
+                                <i class="ti-package"></i>
+                                <span class="menu-text">Gudang Produksi</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="/gudang-toko">
+                                <i class="ti-bag"></i>
+                                <span class="menu-text">Gudang Toko</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="/gudang-frozen">
+                                <i class="fa fa-snowflake-o"></i>    
+                                <span class="menu-text">Gudang Frozen</span>
+                            </a>
+                        </li>
+                        <hr width="80%">
                         <li class="maincat ">
                             <a href="#">
                                 <i class="ti-palette"></i>

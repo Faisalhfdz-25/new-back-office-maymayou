@@ -45,7 +45,7 @@
                                         <td>{{ $item->role_id }}</td>
                                         <td>
                                             <a class="btn btn-sm btn-warning" href="javascript:void(0);" onclick="edit('{{ $item->id }}')">Edit</a>
-                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="delete('{{ $item->id }}')">Delete</a>
+                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -187,14 +187,14 @@
 @endsection
 @section('script')
 <script>
-    function delete(id) {
+    function hapus(id) {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You want to delete this user!",
+            title: 'Yakin?',
+            text: "Mau menghapus data ini!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#FF2C2C',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Ya, Hapus saja !'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({

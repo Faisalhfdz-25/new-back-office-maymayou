@@ -3,6 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GudangFrozenController;
+use App\Http\Controllers\GudangProduksiController;
+use App\Http\Controllers\GudangPurchaseController;
+use App\Http\Controllers\GudangTokoController;
 use App\Http\Controllers\InventoryListController;
 use App\Http\Controllers\JenisKategoriController;
 use App\Http\Controllers\KelasProdukController;
@@ -78,5 +82,25 @@ Route::middleware('auth')->group(function () {
         Route::post('/toko/store', 'store');
         Route::post('/toko/update', 'update');
         Route::get('/toko/getDetail', 'getdetail');
+    });
+
+    Route::controller(GudangPurchaseController::class)->group(function (){
+        Route::get('/gudang-purchase', 'index');
+        Route::get('/gudang-purchase/history/{kode}', 'history');
+    });
+
+    Route::controller(GudangProduksiController::class)->group(function (){
+        Route::get('/gudang-produksi', 'index');
+        Route::get('/gudang-produksi/history/{kode}', 'history');
+    });
+
+    Route::controller(GudangTokoController::class)->group(function (){
+        Route::get('/gudang-toko', 'index');
+        Route::get('/gudang-toko/history/{kode}', 'history');
+    });
+
+    Route::controller(GudangFrozenController::class)->group(function (){
+        Route::get('/gudang-frozen', 'index');
+        Route::get('/gudang-frozen/history/{kode}', 'history');
     });
 });
