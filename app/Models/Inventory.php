@@ -28,4 +28,7 @@ class Inventory extends Model
     {
         return $this->belongsTo('App\Models\Supplier', 'tempat', 'id');
     }
+
+    
+    
 }

@@ -17,14 +17,22 @@ class GudangPurchaseController extends Controller
         $data = Inventory::all();
         $kelas = KelasProduk::orderBy('id', 'ASC')->get();
         $penggunaan = PenggunaanProduk::orderBy('id', 'ASC')->get();
-        $jenis = JenisKategori::orderBy('id','ASC')->get();
-        $tempat = Supplier::orderBy('id','ASC')->get();
-        return view('gudang_purchase.index',compact('data','kelas','penggunaan','jenis','tempat'));
+        $jenis = JenisKategori::orderBy('id', 'ASC')->get();
+        $tempat = Supplier::orderBy('id', 'ASC')->get();
+
+
+        foreach ($data as $item) {
+            $totalStock = HistoryPurchase::where('id_inventory', $item->id)->sum('stock');
+
+            $item->stok = $totalStock;
+        }
+
+        return view('gudang_purchase.index', compact('data', 'kelas', 'penggunaan', 'jenis', 'tempat'));
     }
-    
-    public function history(){
-         
-        $data = HistoryPurchase::all();
+
+    public function history($id)
+    {
+        $data = HistoryPurchase::where('id_inventory', $id)->get();
         return view('gudang_purchase.history', compact('data'));
     }
 }

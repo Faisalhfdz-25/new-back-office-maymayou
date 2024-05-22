@@ -51,7 +51,7 @@
                                         <td>{{ $item->jeniskategori->nama }}</td>
                                         <td>{{ $item->penggunaanproduk->nama }}</td>
                                         <td>{{ $item->kelasproduk->nama }}</td>
-                                        <td>Belum di atur</td>
+                                        <td>{{ $item->stok}}</td>
                                         <td>{{ $item->satuan }}</td>
                                         <td>{{ $item->qty_min }}</td>
                                         <td>{{ $item->merk }}</td>
@@ -60,7 +60,7 @@
                                         <td>
                                             {{-- <a class="btn btn-sm btn-warning" href="/inventory-list/editview/{{ $item->id }}">Edit</a>
                                             <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a> --}}
-                                            <a href="/gudang-produksi/history/{{$item->kode}}" class="btn btn-sm btn-primary">History</a>
+                                            <a href="/gudang-produksi/history/{{$item->id}}" class="btn btn-sm btn-primary">History</a>
                                         </td>
                                     </tr>
                                 @endforeach

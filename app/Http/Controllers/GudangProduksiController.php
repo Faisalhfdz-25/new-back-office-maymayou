@@ -18,11 +18,19 @@ class GudangProduksiController extends Controller
         $penggunaan = PenggunaanProduk::orderBy('id', 'ASC')->get();
         $jenis = JenisKategori::orderBy('id','ASC')->get();
         $tempat = Supplier::orderBy('id','ASC')->get();
-        return view('gudang_produksi.index',compact('data','kelas','penggunaan','jenis','tempat'));
+
+
+        foreach ($data as $item) {
+            $totalStock = HistoryProduksi::where('id_inventory', $item->id)->sum('stock');
+
+            $item->stok = $totalStock;
+        }
+
+        return view('gudang_produksi.index', compact('data','kelas','penggunaan','jenis','tempat'));
     }
 
-    public function history(){
-        $data = HistoryProduksi::all();
-        return view('gudang_produksi.history', compact('data'));
+    public function history($id){
+        $data_produksi = HistoryProduksi::where('id_inventory', $id)->get();
+        return view('gudang_produksi.history', compact('data_produksi'));
     }
 }

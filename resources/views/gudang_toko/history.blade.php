@@ -33,6 +33,7 @@
                                         <th>ID Inventory</th>
                                         <th>Satuan</th>
                                         <th>Qty</th>
+                                        <th>Stock</th>
                                         <th>Harga</th>
                                         <th>Tanggal Pengadaan</th>
                                     </tr>
@@ -44,6 +45,7 @@
                                             <td>{{ $item->id_inventory }}</td>
                                             <td>{{ $item->satuan }}</td>
                                             <td>{{ $item->qty }}</td>
+                                            <td>{{ $item->stock }}</td>
                                             <td>{{ $item->harga }}</td>
                                             <td>{{ $item->tanggal_pengadaan }}</td>
 

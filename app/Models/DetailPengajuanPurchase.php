@@ -5,10 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HistoryProduksi extends Model
+class DetailPengajuanPurchase extends Model
 {
     use HasFactory;
-    protected $table = 'history_produksi';
+
+    protected $table = 'detail_pengajuan_purchase';
+
+    public function pengajuan()
+    {
+        return $this->belongsTo(PengajuanPurchase::class, 'id_pengajuan');
+    }
 
     public function inventory()
     {

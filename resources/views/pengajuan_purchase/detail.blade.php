@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','Gudang Frozen')
+@section('title','Detail Pengajuan')
 @section('content')
 <div class="main">
 
@@ -8,7 +8,7 @@
         <div class="col">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="ti-home"></i> Master Data</a></li>
-                <li class="breadcrumb-item active">Gudang Frozen</li>
+                <li class="breadcrumb-item active">Detail Pengajuan </li>
             </ol>
         </div>
     </div>
@@ -19,7 +19,7 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <div class="caption uppercase">
-                        <i class="ti-file"></i> Gudang Frozen
+                        <i class="ti-file"></i> Detail Pengajuan 
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="btn btn-sm btn-success exampleModalSize" data-size="lg"><i class="ti-plus"></i> Tambah Data</a>
@@ -30,38 +30,40 @@
                         <table class="table table-bordered table-hover init-datatable" id="supplier_table">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>Kode</th>
-                                    <th>Nama</th>
-                                    <th>Jenis</th>
-                                    <th>Penggunaan</th>
-                                    <th>Kelas</th>
-                                    <th>Stok</th>
-                                    <th>Satuan</th>
-                                    <th>QTY Min</th>
-                                    <th>Merk</th>
+                                    <th>ID Pengajuan</th>
+                                    <th>ID Inventory</th>
+                                    <th>Qty</th>
+                                    <th>Harga</th>
                                     <th>Tempat</th>
-                                    <th>Action</th>
+                                    <th>Status</th>
+                                    {{-- <th>Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($data as $item)
-                                    <tr>
-                                        <td>{{ $item->kode }}</td>
-                                        <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->jeniskategori->nama }}</td>
-                                        <td>{{ $item->penggunaanproduk->nama }}</td>
-                                        <td>{{ $item->kelasproduk->nama }}</td>
-                                        <td>{{ $item->stok}}</td>
-                                        <td>{{ $item->satuan }}</td>
-                                        <td>{{ $item->qty_min }}</td>
-                                        <td>{{ $item->merk }}</td>
-                                        <td>{{ $item->supplier->nama }}</td>
+                                    <tr>    
+                                        <td>{{ $item->id_pengajuan }}</td>
+                                        <td>{{ $item->id_inventory }}</td>
+                                        <td>{{ $item->qty }}</td>
+                                        <td>{{ $item->harga }}</td>
+                                        <td>{{ $item->tempat }}</td>
+                                        <td>Status</td>
                                         
-                                        <td>
-                                            {{-- <a class="btn btn-sm btn-warning" href="/inventory-list/editview/{{ $item->id }}">Edit</a>
-                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a> --}}
-                                            <a href="/gudang-frozen/history/{{ $item->id }}" class="btn btn-sm btn-primary">History</a>
-                                        </td>
+                                        {{-- <td>
+                                            @if ($item->is_produksi == 1)
+                                                <a class="btn btn-sm btn-outline-grape btn-round" href="javascript:void(0);">Produksi</a>
+                                            @endif
+                                            @if ($item->is_toko == 1)
+                                                <a class="btn btn-sm btn-outline-lemon btn-round" href="javascript:void(0);">Toko</a>
+                                            @endif
+                                            @if ($item->is_frozen == 1)
+                                                <a class="btn btn-sm btn-outline-azure btn-round" href="javascript:void(0);">Frozen</a>
+                                            @endif    
+                                        </td> --}}
+                                        {{-- <td>
+                                            <a class="btn btn-sm btn-success" href="">Ajukan</a>
+                                            <a class="btn btn-sm btn-primary" href="/pengajuan-purchase/detail/{{ $item->id }}">Detail</a><br>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -73,7 +75,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="exampleModalSize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="exampleModalSize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -213,7 +215,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 @endsection
 @section('script')

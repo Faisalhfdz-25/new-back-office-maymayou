@@ -19,12 +19,19 @@ class GudangFrozenController extends Controller
         $penggunaan = PenggunaanProduk::orderBy('id', 'ASC')->get();
         $jenis = JenisKategori::orderBy('id','ASC')->get();
         $tempat = Supplier::orderBy('id','ASC')->get();
+
+        foreach ($data as $item) {
+            $totalStock = HistoryFrozen::where('id_inventory', $item->id)->sum('stock');
+
+            $item->stok = $totalStock;
+        }
+
         return view('gudang_frozen.index',compact('data','kelas','penggunaan','jenis','tempat'));
     }
 
-    public function history(){
+    public function history($id){
          
-        $data = HistoryFrozen::all();
+        $data = HistoryFrozen::where('id_inventory', $id)->get();
         return view('gudang_frozen.history', compact('data'));
     }
 }

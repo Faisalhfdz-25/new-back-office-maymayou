@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GudangFrozenController;
 use App\Http\Controllers\GudangProduksiController;
@@ -10,11 +9,11 @@ use App\Http\Controllers\GudangTokoController;
 use App\Http\Controllers\InventoryListController;
 use App\Http\Controllers\JenisKategoriController;
 use App\Http\Controllers\KelasProdukController;
+use App\Http\Controllers\PengajuanPurchaseController;
 use App\Http\Controllers\PenggunaanProdukController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TokoController;
 use App\Http\Controllers\UserController;
-use App\Models\PenggunaanProduk;
 use Illuminate\Support\Facades\Route;
 
 
@@ -86,21 +85,26 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(GudangPurchaseController::class)->group(function (){
         Route::get('/gudang-purchase', 'index');
-        Route::get('/gudang-purchase/history/{kode}', 'history');
+        Route::get('/gudang-purchase/history/{id}', 'history');
     });
 
     Route::controller(GudangProduksiController::class)->group(function (){
         Route::get('/gudang-produksi', 'index');
-        Route::get('/gudang-produksi/history/{kode}', 'history');
+        Route::get('/gudang-produksi/history/{id}', 'history');
     });
 
     Route::controller(GudangTokoController::class)->group(function (){
         Route::get('/gudang-toko', 'index');
-        Route::get('/gudang-toko/history/{kode}', 'history');
+        Route::get('/gudang-toko/history/{id}', 'history');
     });
 
     Route::controller(GudangFrozenController::class)->group(function (){
         Route::get('/gudang-frozen', 'index');
-        Route::get('/gudang-frozen/history/{kode}', 'history');
+        Route::get('/gudang-frozen/history/{id}', 'history');
+    });
+
+    Route::controller(PengajuanPurchaseController::class)->group(function () {
+        Route::get('/pengajuan-purchase', 'index');
+        Route::get('/pengajuan-purchase/detail/{id}', 'detail');
     });
 });

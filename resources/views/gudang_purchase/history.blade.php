@@ -36,6 +36,7 @@
                                         <th>ID Inventory</th>
                                         <th>Satuan</th>
                                         <th>Qty</th>
+                                        <th>Stock</th>
                                         <th>Harga</th>
                                         <th>Tanggal Pengadaan</th>
                                     </tr>
@@ -47,14 +48,11 @@
                                             <td>{{ $item->id_inventory }}</td>
                                             <td>{{ $item->satuan }}</td>
                                             <td>{{ $item->qty }}</td>
+                                            <td>{{ $item->stock }}</td>
                                             <td>{{ $item->harga }}</td>
                                             <td>{{ $item->tanggal_pengadaan }}</td>
 
-                                            <td>
-                                                {{-- <a class="btn btn-sm btn-warning" href="/inventory-list/editview/{{ $item->id }}">Edit</a>
-                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a> --}}
-                                                {{-- <a href="#" class="btn btn-sm btn-primary">History</a> --}}
-                                            </td>
+                                            
                                         </tr>
                                     @endforeach
                                 </tbody>

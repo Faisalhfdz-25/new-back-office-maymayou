@@ -183,6 +183,13 @@
                             </a>
                         </li>
                         <hr width="80%">
+                        <li class="active">
+                            <a href="/pengajuan-purchase">
+                                <i class="fa  fa-paper-plane"></i>    
+                                <span class="menu-text">Pengajuan Purchase</span>
+                            </a>
+                        </li>
+                        <hr width="80%">
                         <li class="maincat ">
                             <a href="#">
                                 <i class="ti-palette"></i>
@@ -217,6 +224,9 @@
                                 </ul>
                             </div>
                         </li>
+
+                        
+                        
                         <li class="maincat ">
                             <a href="#">
                                 <i class="ti-layout-grid2"></i>
