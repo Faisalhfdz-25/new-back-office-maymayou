@@ -70,7 +70,7 @@
                                             <a class="btn btn-sm btn-warning" href="/inventory-list/editview/{{ $item->id }}">Edit</a><br>
                                             <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a><br>
                                             @if ($item->jenis == 9)
-                                                <a class="btn btn-sm btn-info" href="javascript:void(0);">Resep</a>
+                                                <a class="btn btn-sm btn-info" href="/inventory-list/resep/{{ $item->id }}">Resep</a>
                                             @endif
                                         </td>
                                     </tr>
