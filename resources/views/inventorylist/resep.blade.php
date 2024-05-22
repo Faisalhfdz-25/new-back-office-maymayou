@@ -19,7 +19,6 @@
             <!-- BOF General Form -->
             <div class="col-lg-12">
                 <div class="card mb-3">
-                    
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <div class="form-group row">
@@ -70,7 +69,7 @@
                                 <tbody>
                                     @foreach ($resep as $item)
                                         <tr>
-                                            <td>{{ $item->id_inventory }}</td>
+                                            <td>{{ $item->inventory->nama }}</td>
                                             <td>{{ $item->satuan }}</td>
                                             <td>{{ $item->qty }}</td>
                                             <td>{{ $item->harga }}</td>
@@ -150,7 +149,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{url('inventory-list/hapus')}}",
+                        url: "{{url('inventory-list/resep/hapus')}}",
                         type: "post",
                         data: {
                             _token: '{{csrf_token()}}',

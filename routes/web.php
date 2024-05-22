@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/inventory-list/update', 'update');
         Route::get('/inventory-list/resep/{id}', 'resep');
         Route::post('/inventory-list/resep/simpan', 'simpanresep');
+        Route::post('/inventory-list/resep/hapus', 'hapusresep');
 
     });
 

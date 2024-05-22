@@ -133,11 +133,26 @@ class InventoryListController extends Controller
         $data = new Resep();
         $data->id_produk = $request->id_produk;
         $data->id_inventory = $request->id_inventory;
-        $data->satuan="";
+
+        $inventory = Inventory::find($request->id_inventory);
+        $data->satuan = $inventory->satuan;
         $data->harga="";
         $data->qty = $request->qty;
         $data->save();
         return redirect()->back()->with('Save','Data Berhasil Disimpan');
 
+    }
+
+    public function hapusresep(Request $request)
+    {
+        $data = Resep::where('id', $request->id)->first();
+        if (!$data) {
+            return 'false';
+        }
+        if ($data->delete()) {
+            return 'true';
+        } else {
+            return 'false';
+        }
     }
 }
