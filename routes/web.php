@@ -109,6 +109,7 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(PengajuanPurchaseController::class)->group(function () {
         Route::get('/pengajuan-purchase', 'index');
-        Route::get('/pengajuan-purchase/detail/{id}', 'detail');
+        Route::post('/pengajuan-purchase/simpan', 'simpan');
+        Route::post('/pengajuan-purchase/ajukan', 'ajukan');
     });
 });

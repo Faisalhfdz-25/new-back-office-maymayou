@@ -20,4 +20,8 @@ class DetailPengajuanPurchase extends Model
     {
         return $this->belongsTo(Inventory::class, 'id_inventory');
     }
+    public function supplier()
+    {
+        return $this->belongsTo('App\Models\Supplier', 'tempat', 'id');
+    }
 }
