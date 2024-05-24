@@ -34,7 +34,7 @@ class PengajuanPurchaseController extends Controller
         $data = PengajuanPurchase::all();
         $inventory = Inventory::all();
         $tempat = Supplier::orderBy('id', 'ASC')->get();
-        $total = DetailPengajuanPurchase::where('kode', $kode )->sum('harga');
+        $total = DetailPengajuanPurchase::where('kode', $kode )->sum('sub_total');
 
         $tanggal = Carbon::now('Asia/Jakarta')->format('d-m-Y');
 
