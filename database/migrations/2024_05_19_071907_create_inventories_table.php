@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('satuan');
             $table->integer('qty_min');
             $table->string('merk');
+            $table->integer('harga');
             $table->string('tempat');
             $table->boolean('is_produksi');
             $table->boolean('is_toko');
