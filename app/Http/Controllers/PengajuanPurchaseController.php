@@ -12,6 +12,11 @@ use App\Models\Supplier;
 
 class PengajuanPurchaseController extends Controller
 {
+    public function purchase(){
+        $data = PengajuanPurchase::all();
+        return view('pengajuan_purchase.purhcase',compact('data'));
+    }
+    
     public function index()
     {
 
@@ -74,31 +79,63 @@ class PengajuanPurchaseController extends Controller
     }
 
     public function ajukan(Request $request)
-{
-    $data = new PengajuanPurchase();
-    DB::beginTransaction();
-    try {
-        $data->kode = $request->kode;
-        $data->tanggal = Carbon::now('Asia/Jakarta');
-        
-        
-        $totalItem = DetailPengajuanPurchase::count();
-        $data->total_item = $totalItem;
-        
-        
-        $data->total_payment = $request->total;
+    {
+        $data = new PengajuanPurchase();
+        DB::beginTransaction();
+        try {
+            $data->kode = $request->kode;
+            $data->tanggal = Carbon::now('Asia/Jakarta');
+            
+            
+            $totalItem = DetailPengajuanPurchase::count();
+            $data->total_item = $totalItem;
+            
+            
+            $data->total_payment = $request->total;
 
-        if ($data->save()) {
-            DB::commit();
-            return redirect('/pengajuan-purchase')->with('Save', 'Data Berhasil Diajukan');
-        } else {
+            if ($data->save()) {
+                DB::commit();
+                return redirect('/pengajuan-purchase')->with('Save', 'Data Berhasil Diajukan');
+            } else {
+                DB::rollback();
+                return redirect('/pengajuan-purchase')->with('Error', 'Data Gagal Diajukan');
+            }
+        } catch (\Throwable $th) {
             DB::rollback();
-            return redirect('/pengajuan-purchase')->with('Error', 'Data Gagal Diajukan');
+            return redirect('/pengajuan-purchase')->with('Error', 'Terjadi kesalahan: ' . $th->getMessage());
         }
-    } catch (\Throwable $th) {
-        DB::rollback();
-        return redirect('/pengajuan-purchase')->with('Error', 'Terjadi kesalahan: ' . $th->getMessage());
     }
-}
+
+    public function detail($id){
+        $data = PengajuanPurchase::find($id);
+        $detail = DetailPengajuanPurchase::where('kode',$data->kode)->get();
+        return view('pengajuan_purchase.detail',compact('data','detail'));
+    }
+
+    public function acc($id,$status){
+        $data = DetailPengajuanPurchase::find($id);
+        if($data->acc != 0){
+            if($status == 1){
+                $purchase = PengajuanPurchase::where('kode',$data->kode)->first();
+                $purchase->total_payment = $purchase->total_payment + $data->sub_total;
+                $purchase->update(); 
+            }
+        }
+        $data->acc = $status;
+        if($status == 2){
+            $purchase = PengajuanPurchase::where('kode',$data->kode)->first();
+            $purchase->total_payment = $purchase->total_payment - $data->sub_total;
+            $purchase->update(); 
+        }
+        $data->update();
+        return redirect()->back();
+    }
+
+    public function setujui($kode){
+        $data = PengajuanPurchase::where('kode',$kode)->first();
+        $data->acc = 1;
+        $data->update();
+        return redirect()->back();
+    }
 
 }

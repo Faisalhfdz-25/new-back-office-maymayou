@@ -9,7 +9,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#"><i class="ti-home"></i> Master Data</a></li>
                     <li class="breadcrumb-item"><a href="/pengajuan-purchase">Pengajuan Pruchase</a></li>
-                    <li class="breadcrumb-item active">Tambah Data</li>
+                    <li class="breadcrumb-item active">Detail Data</li>
                 </ol>
             </div>
         </div>
@@ -29,28 +29,40 @@
                                     <label class="col-md-3 col-form-label">Kode</label>
                                     <div class="col-md-9">
                                         <input type="text" class="form-control" name="kode"
-                                            value="{{ $kode }}" readonly>
+                                            value="{{ $data->kode }}" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Tanggal</label>
                                     <div class="col-md-9">
                                         <input type="text" class="form-control" name="tanggal"
-                                            value="{{ $tanggal }}" readonly>
+                                            value="{{ $data->tanggal }}" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Total</label>
                                     <div class="col-md-9">
                                         <input type="text" class="form-control" name="total"
-                                            value="{{ $total }}" readonly>
+                                            value="{{ $data->total_payment }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Status</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control"
+                                            @if ($data->acc == 0)
+                                                value="Menunggu Persetujuan"
+                                            @else
+                                                value="Disetujui"
+                                            @endif readonly>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-paper-plane"></i>
-                                        Ajukan</button>
-                                </div>
+                                    @if (Auth::user()->role_id == 3 && $data->acc == 0)
+                                        <a href="/pengajuan-purchase-setujui/{{ $data->kode }}" class="btn btn-md btn-primary"><i class="fa fa-paper-plane"></i> Setujui</a>
+                                    @endif
+                                    </div>
                             </form>
                         </div>
                     </div>
@@ -64,9 +76,7 @@
                             <span class="caption uppercase">
                                 <i class="ti-file"></i> Detail pengajuan
                             </span>
-                            <a href="javascript:;" class="btn btn-sm btn-success exampleModalSize" data-size="lg">
-                                <i class="ti-plus"></i> Tambah Data
-                            </a>
+                            
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -91,18 +101,18 @@
                                                 <td>{{ $item->harga }}</td>
                                                 <td>{{ $item->supplier->nama }}</td>
                                                 <td>{{ $item->sub_total }}</td>
+                                                @if ($item->acc == 0)
+                                                    <td>Draft</td>
+                                                @elseif($item->acc == 1)
+                                                    <td>Disetujui</td>
+                                                @elseif($item->acc == 2)
+                                                    <td>Tidak Disetuji</td>                                                    
+                                                @endif
                                                 <td>
-                                                    @if ($item->acc == 0)
-                                                        <button class="btn btn-sm btn-info">Draft</button>
-                                                    @elseif($item->acc == 1)
-                                                        <button class="btn btn-sm btn-success">Disetujui</button>
-                                                    @elseif($item->acc == 2)
-                                                        <button class="btn btn-sm btn-danger">Tidak Disetujui</button>
+                                                    @if (Auth::user()->role_id == 3 && $data->acc == 0)
+                                                    <a class="btn btn-sm btn-success" href="/pengajuan-purchase-acc/{{ $item->id }}/1">Terima</a>
+                                                    <a class="btn btn-sm btn-warning" href="/pengajuan-purchase-acc/{{ $item->id }}/2">Tolak</a>
                                                     @endif
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-sm btn-danger" href="javascript:void(0);"
-                                                        onclick="hapus('{{ $item->id }}')">Delete</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -117,7 +127,7 @@
 
         <!-- EOF MAIN-BODY -->
     </div>
-    <div class="modal fade" id="exampleModalSize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    {{-- <div class="modal fade" id="exampleModalSize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -145,7 +155,7 @@
                                         <label class="col-md-3 col-form-label">Inventory List</label>
                                         <div class="col">
                                             {{-- <input type="number" class="form-control" name="id_inventory" value="{{ $inventory->id }}"> --}}
-                                            <select class="form-control selectpicker" id="inventoryList"
+                                            {{-- <select class="form-control selectpicker" id="inventoryList"
                                                 name="id_inventory">
                                                 <option value="" selected disabled>Pilih Inventory</option>
                                                 @foreach ($inventory as $item)
@@ -198,7 +208,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 @section('script')
     <script>

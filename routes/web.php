@@ -108,7 +108,11 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(PengajuanPurchaseController::class)->group(function () {
-        Route::get('/pengajuan-purchase', 'index');
+        Route::get('/pengajuan-purchase', 'purchase');
+        Route::get('/pengajuan-purchase-tambah', 'index');
+        Route::get('/pengajuan-purchase-setujui/{id}', 'setujui');
+        Route::get('/pengajuan-purchase-acc/{id}/{status}', 'acc');
+        Route::get('/pengajuan-purchase-detail/{id}', 'detail');
         Route::post('/pengajuan-purchase/simpan', 'simpan');
         Route::post('/pengajuan-purchase/ajukan', 'ajukan');
     });

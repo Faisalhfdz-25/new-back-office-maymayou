@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->integer('total_item');
             $table->integer('total_payment');
+            $table->integer('acc');
             $table->timestamps();
         });
     }

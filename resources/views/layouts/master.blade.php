@@ -124,243 +124,99 @@
                                 <span class="menu-text">Dashboard</span>
                             </a>
                         </li>
-                        <li class="maincat ">
-                            <a href="#">
-                                <i class="ti-file"></i>
-                                <span class="menu-text">Master Data</span>
-                            </a>
-                            <div class="subcat">
-                                <ul>
-                                    <li>
-                                        <a href="/inventory-list">Inventory List</a>
-                                    </li>
-                                    <li class="tier1">
-                                        <a href="javascript:;">Kategori</a>
-                                        <div class="subcat">
-                                            <ul>
-                                                <li><a href="/penggunaan-produk">Penggunaan Produk</a></li>
-                                                <li><a href="/jenis-kategori">Jenis Produk</a></li>
-                                                <li><a href="/kelas-produk">Kelas dan Varian Produk</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href="/toko">Toko</a>
-                                    </li>
-                                    <li>
-                                        <a href="/user">Users</a>
-                                    </li>
-                                    <li>
-                                        <a href="/supplier">Supplier</a>
-                                    </li>
-                                    
-                                </ul>
-                            </div>
-                        </li>
-                        <hr width="80%">
-                        <li class="active">
-                            <a href="/gudang-purchase">
-                                <i class="ti-shopping-cart"></i>
-                                <span class="menu-text">Gudang Purchase</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="/gudang-produksi">
-                                <i class="ti-package"></i>
-                                <span class="menu-text">Gudang Produksi</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="/gudang-toko">
-                                <i class="ti-bag"></i>
-                                <span class="menu-text">Gudang Toko</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="/gudang-frozen">
-                                <i class="fa fa-snowflake-o"></i>    
-                                <span class="menu-text">Gudang Frozen</span>
-                            </a>
-                        </li>
-                        <hr width="80%">
-                        <li class="active">
-                            <a href="/pengajuan-purchase">
-                                <i class="fa  fa-paper-plane"></i>    
-                                <span class="menu-text">Pengajuan Purchase</span>
-                            </a>
-                        </li>
-                        <hr width="80%">
-                        <li class="maincat ">
-                            <a href="#">
-                                <i class="ti-palette"></i>
-                                <span class="menu-text">UI Elements</span>
-                            </a>
-                            <div class="subcat">
-                                <ul>
-                                    <li >
-                                        <a href="ui_typography.html">Typography</a>
-                                    </li>
-                                    <li >
-                                        <a href="ui_colors.html">Colors</a>
-                                    </li>
-                                    <li >
-                                        <a href="ui_fontawesome.html">Fontawesome Icons</a>
-                                    </li>
-                                    <li >
-                                        <a href="ui_themify.html">Themify Icons</a>
-                                    </li>
-                                    <li >
-                                        <a href="ui_buttons.html">Buttons</a>
-                                    </li>
-                                    <li >
-                                        <a href="ui_cards.html">Cards</a>
-                                    </li>
-                                    <li >
-                                        <a href="ui_modals.html">Modals</a>
-                                    </li>
-                                    <li >
-                                        <a href="ui_toastr.html">Toastr Notifications</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2)
+                            <li class="maincat ">
+                                <a href="#">
+                                    <i class="ti-file"></i>
+                                    <span class="menu-text">Kategori Data</span>
+                                </a>
+                                <div class="subcat">
+                                    <ul>
+                                        <li>
+                                            <a href="/penggunaan-produk">Penggunaan Produk</a>
+                                        </li>
+                                        <li>
+                                            <a href="/jenis-kategori">Jenis Produk</a>
+                                        </li>
+                                        <li>
+                                            <a href="/kelas-produk">Kelas dan Varian Produk</a>
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="active">
+                                <a href="/inventory-list">
+                                    <i class="ti-view-grid"></i>
+                                    <span class="menu-text">Inventory List</span>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="/toko">
+                                    <i class="ti-shopping-cart"></i>
+                                    <span class="menu-text">Toko</span>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="/supplier">
+                                    <i class="ti-truck"></i>
+                                    <span class="menu-text">Supplier</span>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="/user">
+                                    <i class="ti-user"></i>
+                                    <span class="menu-text">Users</span>
+                                </a>
+                            </li>
+                        @endif
+                        
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
+                            <li class="active">
+                                <a href="/gudang-purchase">
+                                    <i class="ti-shopping-cart"></i>
+                                    <span class="menu-text">Gudang Purchase</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 5)
+                            <li class="active">
+                                <a href="/gudang-produksi">
+                                    <i class="ti-package"></i>
+                                    <span class="menu-text">Gudang Produksi</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 6)
+                            <li class="active">
+                                <a href="/gudang-toko">
+                                    <i class="ti-bag"></i>
+                                    <span class="menu-text">Gudang Toko</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7)
+                            <li class="active">
+                                <a href="/gudang-frozen">
+                                    <i class="fa fa-snowflake-o"></i>    
+                                    <span class="menu-text">Gudang Frozen</span>
+                                </a>
+                            </li>
+                        @endif
+                        
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 3 )
+                            <li class="active">
+                                <a href="/pengajuan-purchase">
+                                    <i class="fa  fa-paper-plane"></i>    
+                                    <span class="menu-text">Pengajuan Purchase</span>
+                                </a>
+                            </li>
+                        @endif
 
                         
-                        
-                        <li class="maincat ">
-                            <a href="#">
-                                <i class="ti-layout-grid2"></i>
-                                <span class="menu-text">Tables</span>
-                            </a>
-                            <div class="subcat">
-                                <ul>
-                                    <li >
-                                        <a href="tb_basic.html">Basic Tables</a>
-                                    </li>
-                                    <li >
-                                        <a href="tb_datatables.html">Datatables</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="maincat ">
-                            <a href="#">
-                                <i class="ti-write"></i>
-                                <span class="menu-text">Forms</span>
-                            </a>
-                            <div class="subcat">
-                                <ul>
-                                    <li >
-                                        <a href="fm_control.html">Form Control</a>
-                                    </li>
-                                    <li class="tier1 ">
-                                        <a href="#"><span class="menu-text">CKEditor</span></a>
-                                        <div class="subcat">
-                                            <ul>
-                                                <li >
-                                                    <a href="fm_ckeditor_inline.html">Inline</a>
-                                                </li>
-                                                <li >
-                                                    <a href="fm_ckeditor_classic.html">Classic</a>
-                                                </li>
-                                                <li >
-                                                    <a href="fm_ckeditor_balloon.html">Balloon</a>
-                                                </li>
-                                                <li >
-                                                    <a href="fm_ckeditor_block.html">Balloon Block</a>
-                                                </li>
-                                                <li >
-                                                    <a href="fm_ckeditor_document.html">Document</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="maincat ">
-                            <a href="#">
-                                <i class="ti-bar-chart"></i>
-                                <span class="menu-text">Charts</span>
-                            </a>
-                            <div class="subcat">
-                                <ul>
-                                    <li >
-                                        <a href="ch_apexcharts.html">Apex Charts</a>
-                                    </li>
-                                    <li >
-                                        <a href="javascript:;">amCharts</a>
-                                    </li>
-                                    <li >
-                                        <a href="javascript:;">Morris Charts</a>
-                                    </li>
-                                    <li >
-                                        <a href="javascript:;">Flot Charts</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="header-menu">
-                            Extra
-                        </li>
-                        <li class="maincat ">
-                            <a href="#">
-                                <i class="ti-file"></i>
-                                <span class="menu-text">Pages</span>
-                            </a>
-                            <div class="subcat">
-                                <ul>
-                                    <li >
-                                        <a href="pg_login.html" target="_blank">Login</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="maincat">
-                            <a href="#">
-                                <i class="ti-layers-alt"></i>
-                                <span class="menu-text">Multi-Levels Menu</span>
-                            </a>
-                            <div class="subcat">
-                                <ul>
-                                    <li class="tier1">
-                                        <a href="javascript:;">Tier 1</a>
-                                        <div class="subcat">
-                                            <ul>
-                                                <li><a href="javascript:;">Level 2</a></li>
-                                                <li><a href="javascript:;">Level 2</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">Submenu</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">Submenu</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="">
-                            <a href="documentation.html">
-                                <i class="ti-agenda"></i>
-                                <span class="menu-text">Documentation</span>
-                                <span class="badge badge-pill badge-primary">New</span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="ex_calendar.html">
-                                <i class="ti-calendar"></i>
-                                <span class="menu-text">Calendar</span>
-                                <span class="badge badge-pill badge-primary">New</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/siQuang/siqtheme" target="_blank">
-                                <i class="ti-github"></i>
-                                <span class="menu-text">Github/siQtheme</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
                 <!-- sidebar-menu  -->
