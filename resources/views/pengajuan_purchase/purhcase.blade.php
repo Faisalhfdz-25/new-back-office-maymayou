@@ -42,7 +42,6 @@
                                     <tbody>
                                         @foreach ($data as $item)
                                             <tr>
-
                                                 <td>{{ $item->kode }}</td>
                                                 <td>{{ $item->tanggal }}</td>
                                                 <td>{{ $item->total_item }}</td>

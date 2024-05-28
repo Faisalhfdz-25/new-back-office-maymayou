@@ -211,7 +211,34 @@
                             <li class="active">
                                 <a href="/pengajuan-purchase">
                                     <i class="fa  fa-paper-plane"></i>    
-                                    <span class="menu-text">Pengajuan Purchase</span>
+                                    <span class="menu-text">Pengadaan Stok Purchase</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 5 )
+                            <li class="active">
+                                <a href="/pengajuan-purchase">
+                                    <i class="fa  fa-paper-plane"></i>    
+                                    <span class="menu-text">Pengadaan Stok Produksi</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 6 )
+                            <li class="active">
+                                <a href="/pengajuan-purchase">
+                                    <i class="fa  fa-paper-plane"></i>    
+                                    <span class="menu-text">Pengadaan Stok Toko</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 7 )
+                            <li class="active">
+                                <a href="/pengajuan-purchase">
+                                    <i class="fa  fa-paper-plane"></i>    
+                                    <span class="menu-text">Pengadaan Stok Frozen</span>
                                 </a>
                             </li>
                         @endif
