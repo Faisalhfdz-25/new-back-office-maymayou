@@ -71,26 +71,50 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Satuan</label>
+                                    <label class="col-md-3 col-form-label">Satuan Pengadaan</label>
                                     <div class="col">
-                                        <select class="form-control selectpicker" name="satuan">
-                                            <option value="Kg" @if ($data->satuan == "Kg") selected @endif>Kg</option>
-                                            <option value="Gram" @if ($data->satuan == "Gram") selected @endif>Gram</option>
-                                            <option value="Liter" @if ($data->satuan == "Liter") selected @endif>Liter</option>
-                                            <option value="Mili Liter" @if ($data->satuan == "Mili Liter") selected @endif>Mili Liter</option>
-                                            <option value="Pack" @if ($data->satuan == "Pack") selected @endif>Pack</option>
-                                            <option value="Pcs" @if ($data->satuan == "Pcs") selected @endif>Pcs</option>
-                                            <option value="Bottle" @if ($data->satuan == "Bottle") selected @endif>Bottle</option>
-                                            <option value="Ikat" @if ($data->satuan == "Ikat") selected @endif>Ikat</option>
-                                            <option value="Renceng" @if ($data->satuan == "Renceng") selected @endif>Renceng</option>
+                                        <select class="form-control selectpicker" name="satuan_pengadaan">
+                                            <option value="Kg" @if ($data->satuan_pengadaan == "Kg") selected @endif>Kg</option>
+                                            <option value="Gram" @if ($data->satuan_pengadaan == "Gram") selected @endif>Gram</option>
+                                            <option value="Liter" @if ($data->satuan_pengadaan == "Liter") selected @endif>Liter</option>
+                                            <option value="Mili Liter" @if ($data->satuan_pengadaan == "Mili Liter") selected @endif>Mili Liter</option>
+                                            <option value="Pack" @if ($data->satuan_pengadaan == "Pack") selected @endif>Pack</option>
+                                            <option value="Pcs" @if ($data->satuan_pengadaan == "Pcs") selected @endif>Pcs</option>
+                                            <option value="Bottle" @if ($data->satuan_pengadaan == "Bottle") selected @endif>Bottle</option>
+                                            <option value="Ikat" @if ($data->satuan_pengadaan == "Ikat") selected @endif>Ikat</option>
+                                            <option value="Renceng" @if ($data->satuan_pengadaan == "Renceng") selected @endif>Renceng</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">QTY Min</label>
+                                    <label class="col-md-3 col-form-label">QTY Minimal Pengadaan</label>
                                     <div class="col">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" name="qty" value="{{ $data->qty_min }}">
+                                            <input type="text" class="form-control" name="qty_min_pengadaan" value="{{ $data->qty_min_pengadaan }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Satuan Terkecil / Produksi</label>
+                                    <div class="col">
+                                        <select class="form-control selectpicker" name="satuan_produksi">
+                                            <option value="Kg" @if ($data->satuan_produksi == "Kg") selected @endif>Kg</option>
+                                            <option value="Gram" @if ($data->satuan_produksi == "Gram") selected @endif>Gram</option>
+                                            <option value="Liter" @if ($data->satuan_produksi == "Liter") selected @endif>Liter</option>
+                                            <option value="Mili Liter" @if ($data->satuan_produksi == "Mili Liter") selected @endif>Mili Liter</option>
+                                            <option value="Pack" @if ($data->satuan_produksi == "Pack") selected @endif>Pack</option>
+                                            <option value="Pcs" @if ($data->satuan_produksi == "Pcs") selected @endif>Pcs</option>
+                                            <option value="Bottle" @if ($data->satuan_produksi == "Bottle") selected @endif>Bottle</option>
+                                            <option value="Ikat" @if ($data->satuan_produksi == "Ikat") selected @endif>Ikat</option>
+                                            <option value="Renceng" @if ($data->satuan_produksi == "Renceng") selected @endif>Renceng</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">QTY Minimal Stok</label>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="qty_min_stok" value="{{ $data->qty_min_stok }}">
                                         </div>
                                     </div>
                                 </div>

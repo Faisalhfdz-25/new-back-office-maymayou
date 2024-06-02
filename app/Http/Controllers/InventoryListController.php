@@ -32,8 +32,10 @@ class InventoryListController extends Controller
             $data->jenis = $request->jenis;
             $data->penggunaan = $request->penggunaan;
             $data->kelas = $request->kelas;
-            $data->satuan = $request->satuan;
-            $data->qty_min = $request->qty;
+            $data->satuan_pengadaan = $request->satuan_pengadaan;
+            $data->qty_min_pengadaan = $request->qty_min_pengadaan;
+            $data->satuan_produksi = $request->satuan_produksi;
+            $data->qty_min_stok = $request->qty_min_stok;
             $data->merk = $request->merk;
             $data->tempat = $request->supplier;
             if($request->is_produksi){
@@ -96,8 +98,10 @@ class InventoryListController extends Controller
             $data->jenis = $request->jenis;
             $data->penggunaan = $request->penggunaan;
             $data->kelas = $request->kelas;
-            $data->satuan = $request->satuan;
-            $data->qty_min = $request->qty;
+            $data->satuan_pengadaan = $request->satuan_pengadaan;
+            $data->qty_min_pengadaan = $request->qty_min_pengadaan;
+            $data->satuan_produksi = $request->satuan_produksi;
+            $data->qty_min_stok = $request->qty_min_stok;
             $data->merk = $request->merk;
             $data->tempat = $request->supplier;
 
@@ -129,13 +133,14 @@ class InventoryListController extends Controller
         $resep = Resep::where('id_produk',$id)->get();
         return view('inventorylist.resep',compact('data','resep','inventory'));
     }
+
     public function simpanresep(Request $request){
         $data = new Resep();
         $data->id_produk = $request->id_produk;
         $data->id_inventory = $request->id_inventory;
 
         $inventory = Inventory::find($request->id_inventory);
-        $data->satuan = $inventory->satuan;
+        $data->satuan_produksi = $inventory->satuan_produksi;
         $data->harga="";
         $data->qty = $request->qty;
         $data->save();

@@ -32,13 +32,10 @@
                                 <tr>
                                     <th>Kode</th>
                                     <th>Nama</th>
-                                    <th>Jenis</th>
-                                    <th>Penggunaan</th>
-                                    <th>Kelas</th>
-                                    <th>Satuan</th>
-                                    <th>QTY Min</th>
+                                    <th>Jenis | Penggunaan | Kelas</th>
                                     <th>Merk</th>
                                     <th>Tempat</th>
+                                    <th>Harga Terakhir</th>
                                     <th>Penyaluran</th>
                                     <th>Action</th>
                                 </tr>
@@ -48,13 +45,10 @@
                                     <tr>
                                         <td>{{ $item->kode }}</td>
                                         <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->jeniskategori->nama }}</td>
-                                        <td>{{ $item->penggunaanproduk->nama }}</td>
-                                        <td>{{ $item->kelasproduk->nama }}</td>
-                                        <td>{{ $item->satuan }}</td>
-                                        <td>{{ $item->qty_min }}</td>
+                                        <td>{{ $item->jeniskategori->nama }} | {{ $item->penggunaanproduk->nama }} | {{ $item->kelasproduk->nama }}</td>
                                         <td>{{ $item->merk }}</td>
-                                        <td>{{ $item->supplier->nama }}</td>
+                                        <td>{{ $item->supplier->nama }} - {{ $item->supplier->alamat }}</td>
+                                        <td>{{ $item->harga }}</td>
                                         <td>
                                             @if ($item->is_produksi == 1)
                                                 <a class="btn btn-sm btn-outline-grape btn-round" href="javascript:void(0);">Produksi</a>
@@ -64,7 +58,7 @@
                                             @endif
                                             @if ($item->is_frozen == 1)
                                                 <a class="btn btn-sm btn-outline-azure btn-round" href="javascript:void(0);">Frozen</a>
-                                            @endif    
+                                            @endif
                                         </td>
                                         <td>
                                             <a class="btn btn-sm btn-warning" href="/inventory-list/editview/{{ $item->id }}">Edit</a><br>
@@ -146,9 +140,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Satuan</label>
+                                    <label class="col-md-3 col-form-label">Satuan Pengadaan</label>
                                     <div class="col">
-                                        <select class="form-control selectpicker" name="satuan">
+                                        <select class="form-control selectpicker" name="satuan_pengadaan">
                                             <option value="Kg">Kg</option>
                                             <option value="Gram">Gram</option>
                                             <option value="Liter">Liter</option>
@@ -162,10 +156,34 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">QTY Min</label>
+                                    <label class="col-md-3 col-form-label">QTY Minimal Pengadaan</label>
                                     <div class="col">
                                         <div class="input-group">
-                                            <input type="number" class="form-control" name="qty">
+                                            <input type="number" class="form-control" name="qty_min_pengadaan">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Satuan Terkecil / Produksi</label>
+                                    <div class="col">
+                                        <select class="form-control selectpicker" name="satuan_produksi">
+                                            <option value="Kg">Kg</option>
+                                            <option value="Gram">Gram</option>
+                                            <option value="Liter">Liter</option>
+                                            <option value="Mili Liter">Mili Liter</option>
+                                            <option value="Pack">Pack</option>
+                                            <option value="Pcs">Pcs</option>
+                                            <option value="Bottle">Bottle</option>
+                                            <option value="Ikat">Ikat</option>
+                                            <option value="Renceng">Renceng</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">QTY Minimal Stok</label>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="qty_min_stok">
                                         </div>
                                     </div>
                                 </div>

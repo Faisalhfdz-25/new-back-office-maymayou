@@ -70,7 +70,7 @@
                                     @foreach ($resep as $item)
                                         <tr>
                                             <td>{{ $item->inventory->nama }}</td>
-                                            <td>{{ $item->satuan }}</td>
+                                            <td>{{ $item->satuan_produksi }}</td>
                                             <td>{{ $item->qty }}</td>
                                             <td>{{ $item->harga }}</td>
                                             <td>
@@ -105,7 +105,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 col-form-label">Inventory List</label>
                                         <div class="col">
-                                            <input type="number" class="form-control" name="id_produk" value="{{ $data->id }}">
+                                            <input type="hidden" class="form-control" name="id_produk" value="{{ $data->id }}">
                                             <select class="form-control selectpicker" name="id_inventory">
                                                 @foreach ($inventory as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -177,7 +177,7 @@
     </script>
     @if(session('Save'))
         <script>
-            Swal.fire('Berhasil!', 'Data Berhasil Berhasil Disimpan.', 'success');
+            Swal.fire('Berhasil!', 'Data Berhasil Disimpan.', 'success');
         </script>
     @endif
 @endsection
