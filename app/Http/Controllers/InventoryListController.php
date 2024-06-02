@@ -38,6 +38,7 @@ class InventoryListController extends Controller
             $data->qty_min_stok = $request->qty_min_stok;
             $data->merk = $request->merk;
             $data->tempat = $request->supplier;
+            $data->rumus_bagi = 1;
             if($request->is_produksi){
                 $data->is_produksi = true;
             }else{

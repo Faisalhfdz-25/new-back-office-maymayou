@@ -48,7 +48,12 @@
                                         <td>{{ $item->jeniskategori->nama }} | {{ $item->penggunaanproduk->nama }} | {{ $item->kelasproduk->nama }}</td>
                                         <td>{{ $item->merk }}</td>
                                         <td>{{ $item->supplier->nama }} - {{ $item->supplier->alamat }}</td>
-                                        <td>{{ $item->harga }}</td>
+                                        <td>
+                                            @if ($item->jenis == 9)
+                                                <a class="btn btn-sm btn-info text-charcoal" href="/inventory-list/resep/{{ $item->id }}">Resep</a>
+                                            @else
+                                                {{ $item->harga }}</td>
+                                            @endif
                                         <td>
                                             @if ($item->is_produksi == 1)
                                                 <a class="btn btn-sm btn-outline-grape btn-round" href="javascript:void(0);">Produksi</a>
@@ -61,11 +66,8 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a class="btn btn-sm btn-warning" href="/inventory-list/editview/{{ $item->id }}">Edit</a><br>
-                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a><br>
-                                            @if ($item->jenis == 9)
-                                                <a class="btn btn-sm btn-info" href="/inventory-list/resep/{{ $item->id }}">Resep</a>
-                                            @endif
+                                            <a class="btn btn-sm btn-warning text-charcoal" href="/inventory-list/editview/{{ $item->id }}"><i class="ti-pencil-alt"></i></a>
+                                            <a class="btn btn-sm btn-danger text-charcoal" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')"><i class="ti-trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

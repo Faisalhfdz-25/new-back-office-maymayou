@@ -67,17 +67,35 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $hpp = 0;
+                                    @endphp
                                     @foreach ($resep as $item)
                                         <tr>
                                             <td>{{ $item->inventory->nama }}</td>
                                             <td>{{ $item->satuan_produksi }}</td>
                                             <td>{{ $item->qty }}</td>
-                                            <td>{{ $item->harga }}</td>
+                                            @php
+                                                $harga = $item->inventory->harga / $item->inventory->qty_min_stok;
+                                                $total = $item->qty * $harga;
+                                                $hpp = $hpp + $total;
+                                            @endphp
+                                            <td>Rp. {{ number_format($total) }}</td>
                                             <td>
                                                 <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a><br>
                                             </td>
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                        <td colspan="3" align="right">Total HPP</td>
+                                        <td>Rp. {{ number_format($hpp) }}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" align="right">HPP Per Item</td>
+                                        <td>Rp. {{ number_format($hpp / $data->rumus_bagi) }}</td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
