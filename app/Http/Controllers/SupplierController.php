@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\DB;
 class SupplierController extends Controller
 {
     public function index(){
-        $data = Supplier::all();
-        return view('supplier.index',compact('data'));
+        return view('supplier.index');
     }
 
     public function getData(){

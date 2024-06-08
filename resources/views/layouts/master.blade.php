@@ -164,6 +164,12 @@
                                 </a>
                             </li>
                             <li class="active">
+                                <a href="/role">
+                                    <i class="ti-id-badge"></i>
+                                    <span class="menu-text">Role Users</span>
+                                </a>
+                            </li>
+                            <li class="active">
                                 <a href="/user">
                                     <i class="ti-user"></i>
                                     <span class="menu-text">Users</span>

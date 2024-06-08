@@ -11,6 +11,7 @@ use App\Http\Controllers\JenisKategoriController;
 use App\Http\Controllers\KelasProdukController;
 use App\Http\Controllers\PengajuanPurchaseController;
 use App\Http\Controllers\PenggunaanProdukController;
+use App\Http\Controllers\roleController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TokoController;
 use App\Http\Controllers\UserController;
@@ -36,7 +37,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/inventory-list/resep/{id}', 'resep');
         Route::post('/inventory-list/resep/simpan', 'simpanresep');
         Route::post('/inventory-list/resep/hapus', 'hapusresep');
-
     });
 
     Route::controller(SupplierController::class)->group(function () {
@@ -91,6 +91,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/toko/store', 'store');
         Route::post('/toko/update', 'update');
         Route::get('/toko/getDetail', 'getdetail');
+    });
+
+    Route::controller(roleController::class)->group(function () {
+        Route::get('/role', 'index');
+        Route::get('/role/getdata', 'getData');
+        Route::post('/role/delete', 'delete');
+        Route::post('/role/store', 'store');
+        Route::post('/role/update', 'update');
+        Route::get('/role/getDetail', 'getdetail');
     });
 
     Route::controller(GudangPurchaseController::class)->group(function (){

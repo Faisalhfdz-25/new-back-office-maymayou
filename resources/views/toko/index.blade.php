@@ -134,7 +134,7 @@
 @section('script')
     <script>
 
-$(document).ready(function(){
+        $(document).ready(function(){
             getData();
 
             $('#tambah_form').validate({
@@ -245,43 +245,43 @@ $(document).ready(function(){
     }
 
     
-        function hapus(id) {
-            Swal.fire({
-                title: 'Yakin?',
-                text: "Mau menghapus Data ini!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FF2C2C',
-                confirmButtonText: 'Ya, Hapus aja!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "{{url('toko/delete')}}",
-                        type: "post",
-                        data: {
-                            _token: '{{csrf_token()}}',
-                            id: id
-                        },
-                        dataType: "json",
-                        success: function(data) {
-                            if (data) {
-                                Swal.fire('Berhasil!', 'Data Toko berhasil dihapus.', 'success');
-                                getData();
-                            } else {
-                                Swal.fire('Gagal!', 'Data Toko gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
-                                getData();
-                            }
-                        },
-                        error: function(err) {
-                            Swal.fire('Error!', 'Lihat errornya di console.', 'error');
-                            location.reload()
+    function hapus(id) {
+        Swal.fire({
+            title: 'Yakin?',
+            text: "Mau menghapus Data ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#FF2C2C',
+            confirmButtonText: 'Ya, Hapus aja!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{url('toko/delete')}}",
+                    type: "post",
+                    data: {
+                        _token: '{{csrf_token()}}',
+                        id: id
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data) {
+                            Swal.fire('Berhasil!', 'Data Toko berhasil dihapus.', 'success');
+                            getData();
+                        } else {
+                            Swal.fire('Gagal!', 'Data Toko gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
+                            getData();
                         }
-                    });
-                }
-            })
-        }
+                    },
+                    error: function(err) {
+                        Swal.fire('Error!', 'Lihat errornya di console.', 'error');
+                        location.reload()
+                    }
+                });
+            }
+        })
+    }
 
-        function edit(id) {
+    function edit(id) {
         $.ajax({
             url: "{{url('toko/getDetail')}}",
             type: "get",

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','User')
+@section('title','Role List')
 @section('content')
 <div class="main">
 
@@ -8,33 +8,32 @@
         <div class="col">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="ti-home"></i> Master Data</a></li>
-                <li class="breadcrumb-item active">User Management</li>
+                <li class="breadcrumb-item active">Role List</li>
             </ol>
         </div>
     </div>
     <!-- EOF Breadcrumb -->
-    
     <!-- BOF Basic Datatable -->
     <div class="row">
         <div class="col-lg-12">
             <div class="card mb-3">
                 <div class="card-header">
                     <div class="caption uppercase">
-                        <i class="ti-file"></i> User Management
+                        <i class="ti-file"></i> Role List
                     </div>
                     <div class="tools">
-                        <a href="javascript:;" class="btn btn-sm btn-success exampleModalSize" data-size="lg" data-toggle="modal" data-target="#addModal"><i class="ti-plus"></i> Add User</a>
+                        <a href="javascript:;" class="btn btn-sm btn-success exampleModalSize" data-size="lg"><i class="ti-plus"></i> Tambah Data</a>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover init-datatable" id="user_table">
+                        <table class="table table-bordered table-hover init-datatable" id="role_table">
                             <thead class="thead-light">
                                 <tr>
                                     <th width="10">#</th>
+                                    <th>ID Role</th>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
+                                    <th>Akses</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -48,131 +47,97 @@
     </div>
 </div>
 
-<!-- Add Modal -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModalSize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add User</h5>
+                <h5 class="modal-title">Tambah Data</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" id="tambah_form" action="{{url('user/store')}}" novalidate enctype="multipart/form-data">
+                    <form method="post" id="tambah_form" action="{{url('role/store')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Name</label>
+                                    <label class="col-md-3 col-form-label">Nama</label>
                                     <div class="col">
-                                        <input type="text" class="form-control" name="name">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="nama">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Email</label>
+                                {{-- <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Alamat</label>
                                     <div class="col">
-                                        <input type="email" class="form-control" name="email">
+                                        <textarea class="form-control" name="alamat"></textarea>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Password</label>
-                                    <div class="col">
-                                        <input type="password" class="form-control" name="password">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Role</label>
-                                    <div class="col">
-                                        <select class="form-control" name="role_id">
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">{{ $role->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+                                </div> --}}
                             </li>
                         </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit User</h5>
+                <h5 class="modal-title">Edit Data</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" action="{{url('user/update')}}" novalidate enctype="multipart/form-data">
+                    <form method="post" id="edit_form" action="{{url('role/update')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Name</label>
+                                    <label class="col-md-3 col-form-label">Nama</label>
                                     <div class="col">
-                                        <input type="hidden" class="form-control" name="id" id="id_edit">
-                                        <input type="text" class="form-control" name="name" id="name_edit">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Email</label>
-                                    <div class="col">
-                                        <input type="email" class="form-control" name="email" id="email_edit">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Password</label>
-                                    <div class="col">
-                                        <input type="password" class="form-control" name="password" id="password_edit">
+                                        <div class="input-group">
+                                            <input type="hidden" class="form-control" name="id" id="id_edit">
+                                            <input type="text" class="form-control" name="nama" id="nama_edit">
+                                        </div>
                                     </div>
                                 </div>
                                 {{-- <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Role</label>
+                                    <label class="col-md-3 col-form-label">Alamat</label>
                                     <div class="col">
-                                        <select class="form-control" name="role_id" id="role_id_edit">
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                            @endforeach
-                                        </select>
+                                        <textarea class="form-control" name="alamat" id="alamat_edit"></textarea>
                                     </div>
                                 </div> --}}
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Role</label>
-                                    <div class="col">
-                                        <input type="password" class="form-control" name="role_id" id="role_id_edit">
-                                    </div>
-                                </div>
                             </li>
                         </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary saveButton">Save</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 @endsection
 @section('script')
-<script>
-    $(document).ready(function(){
+    <script>
+
+        $(document).ready(function(){
             getData();
+
             $('#tambah_form').validate({
                 highlight: function(input) {
                     $(input).parents('.form-line').addClass('is-invalid');
@@ -193,11 +158,11 @@
                             $('.saveButton').prop('disabled', false);
                             if (data.success) {
                                 Swal.fire('Selamat!', 'Data Berhasil disimpan!', 'success');
-                                $('#addModal').modal('hide');
+                                $('#exampleModalSize').modal('hide');
                                 getData();
                             } else {
                                 Swal.fire('Maaf!', 'Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
-                                $('#addModal').modal('hide');
+                                $('#exampleModalSize').modal('hide');
                                 getData();
                             }
                         },
@@ -244,7 +209,7 @@
             });
         });
 
-        var user_table = $('#user_table').DataTable({
+        var role_table = $('#role_table').DataTable({
         responsive: true,
         processing: true,
         ajax: "",
@@ -255,13 +220,13 @@
                 defaultContent: ''
             },
             {
-                data: "name"
+                data: "id"
             },
             {
-                data: "email"
+                data: "nama"
             },
             {
-                data: "role_id"
+                data: "akses"
             },
             {
                 data: "aksi",
@@ -270,8 +235,8 @@
         ]
     });
     
-    user_table.on('order.dt search.dt', function() {
-        user_table.column(0, {
+    role_table.on('order.dt search.dt', function() {
+        role_table.column(0, {
             search: 'applied',
             order: 'applied'
         }).nodes().each(function(cell, i) {
@@ -280,21 +245,22 @@
     }).draw();
     
     function getData() {
-        user_table.ajax.url("{{url('user/getdata')}}").load(null, false);
+        role_table.ajax.url("{{url('role/getdata')}}").load(null, false);
     }
 
+    
     function hapus(id) {
         Swal.fire({
             title: 'Yakin?',
-            text: "Mau menghapus data ini!",
+            text: "Mau menghapus Data ini!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#FF2C2C',
-            confirmButtonText: 'Ya, Hapus saja !'
+            confirmButtonText: 'Ya, Hapus aja!'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "{{url('user/delete')}}",
+                    url: "{{url('toko/delete')}}",
                     type: "post",
                     data: {
                         _token: '{{csrf_token()}}',
@@ -303,26 +269,25 @@
                     dataType: "json",
                     success: function(data) {
                         if (data) {
-                            Swal.fire('Deleted!', 'User has been deleted.', 'success');
+                            Swal.fire('Berhasil!', 'Data Toko berhasil dihapus.', 'success');
                             getData();
                         } else {
-                            Swal.fire('Failed!', 'Failed to delete user, please try again later.', 'error');
+                            Swal.fire('Gagal!', 'Data Toko gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
                             getData();
                         }
                     },
                     error: function(err) {
-                        Swal.fire('Error!', 'There was an error, please check the console for details.', 'error');
-                        console.error(err);
-                        location.reload();
+                        Swal.fire('Error!', 'Lihat errornya di console.', 'error');
+                        getData();
                     }
                 });
             }
-        });
+        })
     }
 
     function edit(id) {
         $.ajax({
-            url: "{{url('user/getDetail')}}",
+            url: "{{url('role/getDetail')}}",
             type: "get",
             data: {
                 id: id
@@ -330,20 +295,12 @@
             dataType: "json",
             success: function(data) {
                 $('#id_edit').val(id);
-                $('#name_edit').val(data.name);
-                $('#email_edit').val(data.email);
-                $('#role_id_edit').val(data.role_id);
-                $("#editModal").modal("show");
+                $('#nama_edit').val(data.nama);
+                // $('#alamat_edit').val(data.alamat);
+                $("#edit_modal").modal("show");
             },
-            error: function(err) {
-                console.error(err);
-            }
+            error: function(err) {}
         });
     }
-</script>
-@if(session('Save'))
-<script>
-    Swal.fire('Success!', 'Data has been saved.', 'success');
-</script>
-@endif
+    </script>
 @endsection
