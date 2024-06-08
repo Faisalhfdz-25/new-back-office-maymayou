@@ -2,8 +2,6 @@
 @section('title','Penggunaan Produk')
 @section('content')
 <div class="main">
-
-    <!-- BOF Breadcrumb -->
     <div class="row">
         <div class="col">
             <ol class="breadcrumb">
@@ -12,8 +10,6 @@
             </ol>
         </div>
     </div>
-    <!-- EOF Breadcrumb -->
-    <!-- BOF Basic Datatable -->
     <div class="row">
         <div class="col-lg-12">
             <div class="card mb-3">
@@ -27,25 +23,16 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover init-datatable" id="supplier_table">
+                        <table class="table table-bordered table-hover " id="penggunaan_table">
                             <thead class="thead-light">
                                 <tr>
+                                    <th width="10">#</th>
                                     <th>Name</th>
                                     <th>Keterangan</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $item)
-                                    <tr>
-                                        <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->keterangan }}</td>
-                                        <td>
-                                            <a class="btn btn-sm btn-warning" href="javascript:void(0);" onclick="edit('{{ $item->id }}')">Edit</a>
-                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -54,7 +41,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="exampleModalSize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -66,7 +52,7 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" action="{{url('penggunaan-produk/simpan')}}" novalidate enctype="multipart/form-data">
+                    <form method="post" id="tambah_form" action="{{url('penggunaan-produk/simpan')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -96,7 +82,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -108,7 +93,7 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" action="{{url('penggunaan-produk/update')}}" novalidate enctype="multipart/form-data">
+                    <form id="edit_form" method="post" action="{{url('penggunaan-produk/update')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -133,7 +118,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary saveButton">Save</button>
                 </form>
             </div>
         </div>
@@ -142,43 +127,153 @@
 @endsection
 @section('script')
     <script>
-        function hapus(id) {
-            Swal.fire({
-                title: 'Yakin?',
-                text: "Mau menghapus Data ini!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FF2C2C',
-                confirmButtonText: 'Ya, Hapus aja!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+        $(document).ready(function(){
+            getData();
+
+            $('#tambah_form').validate({
+                highlight: function(input) {
+                    $(input).parents('.form-line').addClass('is-invalid');
+                },
+                unhighlight: function(input) {
+                    $(input).parents('.form-line').removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    $('.saveButton').prop('disabled', true);
                     $.ajax({
-                        url: "{{url('penggunaan-produk/hapus')}}",
-                        type: "post",
-                        data: {
-                            _token: '{{csrf_token()}}',
-                            id: id
-                        },
+                        url: form.action,
+                        type: form.method,
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
                         dataType: "json",
                         success: function(data) {
-                            if (data) {
-                                Swal.fire('Berhasil!', 'Data Penggunaan Produk berhasil dihapus.', 'success');
-                                location.reload()
+                            $('.saveButton').prop('disabled', false);
+                            if (data.success) {
+                                Swal.fire('Selamat!', 'Data Berhasil disimpan!', 'success');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
                             } else {
-                                Swal.fire('Gagal!', 'Data Penggunaan Produk gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
-                                location.reload()
+                                Swal.fire('Maaf!', 'Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
                             }
                         },
                         error: function(err) {
-                            Swal.fire('Error!', 'Lihat errornya di console.', 'error');
-                            location.reload()
+                            $('.saveButton').prop('disabled', false);
                         }
                     });
                 }
-            })
-        }
+            });
 
-        function edit(id) {
+            $('#edit_form').validate({
+                highlight: function(input) {
+                    $(input).parents('.form-line').addClass('is-invalid');
+                },
+                unhighlight: function(input) {
+                    $(input).parents('.form-line').removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    $('.saveButton').prop('disabled', true);
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
+                        dataType: "json",
+                        success: function(data) {
+                            $('.saveButton').prop('disabled', false);
+                            if (data.success) {
+                                Swal.fire('Selamat!', 'Perubahan Data Berhasil Disimpan!', 'success');
+                                $('#edit_modal').modal('hide');
+                                getData();
+                            } else {
+                                Swal.fire('Maaf!', 'Perubahan Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
+                                $('#edit_modal').modal('hide');
+                                getData();
+                            }
+                        },
+                        error: function(err) {
+                            $('.saveButton').prop('disabled', false);
+                        }
+                    });
+                }
+            });
+        });
+
+        var penggunaan_table = $('#penggunaan_table').DataTable({
+        responsive: true,
+        processing: true,
+        ajax: "",
+        columns: [{
+                searchable: false,
+                orderable: false,
+                data: null,
+                defaultContent: ''
+            },
+            {
+                data: "nama"
+            },
+            {
+                data: "keterangan"
+            },
+            {
+                data: "aksi",
+                class: "text-center"
+            },
+        ]
+    });
+    
+    penggunaan_table.on('order.dt search.dt', function() {
+        penggunaan_table.column(0, {
+            search: 'applied',
+            order: 'applied'
+        }).nodes().each(function(cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+    
+    function getData() {
+        penggunaan_table.ajax.url("{{url('penggunaan-produk/getdata')}}").load(null, false);
+    }
+
+    function hapus(id) {
+        Swal.fire({
+            title: 'Yakin?',
+            text: "Mau menghapus Data ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#FF2C2C',
+            confirmButtonText: 'Ya, Hapus aja!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{url('penggunaan-produk/hapus')}}",
+                    type: "post",
+                    data: {
+                        _token: '{{csrf_token()}}',
+                        id: id
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data) {
+                            Swal.fire('Berhasil!', 'Data Penggunaan Produk berhasil dihapus.', 'success');
+                            getData();
+                        } else {
+                            Swal.fire('Gagal!', 'Data Penggunaan Produk gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
+                            getData();
+                        }
+                    },
+                    error: function(err) {
+                        Swal.fire('Error!', 'Lihat errornya di console.', 'error');
+                        location.reload()
+                    }
+                });
+            }
+        })
+    }
+
+    function edit(id) {
         $.ajax({
             url: "{{url('penggunaan-produk/getDetail')}}",
             type: "get",

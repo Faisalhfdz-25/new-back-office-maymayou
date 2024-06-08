@@ -347,10 +347,11 @@
         <div id="overlay"></div>
 
     </div> <!-- END WRAPPER -->
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('assets/scripts/siqtheme.js') }}"></script>
     <script src="{{ asset('assets/vendors/bootstrap-select/bootstrap-select.min.js') }}"></script>
     <script src="{{ asset('assets/scripts/pages/fm_control.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script src="{{ asset('assets/scripts/pages/dashboard1.js') }}"></script>
     <script src="{{ asset('assets/scripts/pages/tb_datatables.js') }}"></script>
     <script src="{{ asset('assets/scripts/pages/ui_modal.js') }}"></script>

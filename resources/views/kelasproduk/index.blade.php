@@ -27,25 +27,16 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover init-datatable" id="supplier_table">
+                        <table class="table table-bordered table-hover init-datatable" id="kelas_table">
                             <thead class="thead-light">
                                 <tr>
+                                    <th width="10">#</th>
                                     <th>Name</th>
                                     <th>Keterangan</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $item)
-                                    <tr>
-                                        <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->keterangan }}</td>
-                                        <td>
-                                            <a class="btn btn-sm btn-warning" href="javascript:void(0);" onclick="edit('{{ $item->id }}')">Edit</a>
-                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -66,7 +57,7 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" action="{{url('kelas-produk/simpan')}}" novalidate enctype="multipart/form-data">
+                    <form method="post" id="tambah_form" action="{{url('kelas-produk/simpan')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -108,7 +99,7 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" action="{{url('kelas-produk/update')}}" novalidate enctype="multipart/form-data">
+                    <form method="post" id="edit_form" action="{{url('kelas-produk/update')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -142,6 +133,117 @@
 @endsection
 @section('script')
     <script>
+
+        $(document).ready(function(){
+            getData();
+
+            $('#tambah_form').validate({
+                highlight: function(input) {
+                    $(input).parents('.form-line').addClass('is-invalid');
+                },
+                unhighlight: function(input) {
+                    $(input).parents('.form-line').removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    $('.saveButton').prop('disabled', true);
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
+                        dataType: "json",
+                        success: function(data) {
+                            $('.saveButton').prop('disabled', false);
+                            if (data.success) {
+                                Swal.fire('Selamat!', 'Data Berhasil disimpan!', 'success');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
+                            } else {
+                                Swal.fire('Maaf!', 'Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
+                            }
+                        },
+                        error: function(err) {
+                            $('.saveButton').prop('disabled', false);
+                        }
+                    });
+                }
+            });
+
+            $('#edit_form').validate({
+                highlight: function(input) {
+                    $(input).parents('.form-line').addClass('is-invalid');
+                },
+                unhighlight: function(input) {
+                    $(input).parents('.form-line').removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    $('.saveButton').prop('disabled', true);
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
+                        dataType: "json",
+                        success: function(data) {
+                            $('.saveButton').prop('disabled', false);
+                            if (data.success) {
+                                Swal.fire('Selamat!', 'Perubahan Data Berhasil Disimpan!', 'success');
+                                $('#edit_modal').modal('hide');
+                                getData();
+                            } else {
+                                Swal.fire('Maaf!', 'Perubahan Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
+                                $('#edit_modal').modal('hide');
+                                getData();
+                            }
+                        },
+                        error: function(err) {
+                            $('.saveButton').prop('disabled', false);
+                        }
+                    });
+                }
+            });
+        });
+
+        var kelas_table = $('#kelas_table').DataTable({
+        responsive: true,
+        processing: true,
+        ajax: "",
+        columns: [{
+                searchable: false,
+                orderable: false,
+                data: null,
+                defaultContent: ''
+            },
+            {
+                data: "nama"
+            },
+            {
+                data: "keterangan"
+            },
+            {
+                data: "aksi",
+                class: "text-center"
+            },
+        ]
+    });
+    
+    kelas_table.on('order.dt search.dt', function() {
+        kelas_table.column(0, {
+            search: 'applied',
+            order: 'applied'
+        }).nodes().each(function(cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+    
+    function getData() {
+        kelas_table.ajax.url("{{url('kelas-produk/getdata')}}").load(null, false);
+    }
+
         function hapus(id) {
             Swal.fire({
                 title: 'Yakin?',
@@ -163,10 +265,10 @@
                         success: function(data) {
                             if (data) {
                                 Swal.fire('Berhasil!', 'Data Kelas Produk berhasil dihapus.', 'success');
-                                location.reload()
+                                getData();
                             } else {
                                 Swal.fire('Gagal!', 'Data Kelas Produk gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
-                                location.reload()
+                                getData();
                             }
                         },
                         error: function(err) {

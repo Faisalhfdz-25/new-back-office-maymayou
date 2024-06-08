@@ -9,26 +9,38 @@ use Illuminate\Support\Facades\DB;
 class PenggunaanProdukController extends Controller
 {
     public function index(){
-        $data = PenggunaanProduk::all();
-        return view('penggunaanproduk.index',compact('data'));
+        return view('penggunaanproduk.index');
+    }
+
+    public function getData(){
+        $datas = PenggunaanProduk::all();
+        foreach($datas as $data){
+            $data->nama = $data->nama;
+            $data->keterangan = $data->keterangan;
+            $data->aksi = '<a href="javascript:void(0);" class="btn btn-round mb-1 btn-warning text-charcoal" onclick="edit(' .$data->id. ')"><i class="ti-pencil-alt"></i>Edit</a>';
+            $data->aksi .= '<a href="javascript:void(0);" class="btn btn-round mb-1 btn-danger text-charcoal" onclick="hapus(' .$data->id .')"><i class="ti-trash"></i>Delete</a>';
+        }
+        return response()->json(['data' => $datas]);
     }
 
     public function simpan(Request $request)
     {
         $data = new PenggunaanProduk();        
         DB::beginTransaction();
+        $success = false;
         try {
             $data->nama = $request->nama;
             $data->keterangan = $request->keterangan;
             if ($data->save()) {
                 DB::commit();
+                $success = true;
             } else {
                 DB::rollback();
             }
         } catch (\Throwable $th) {
             DB::rollback();
         }
-        return redirect('/penggunaan-produk')->with('Save','Data Berhasil Disimpan');
+        return response()->json(['success' => $success]);
     }
 
     public function hapus(Request $request)
@@ -57,12 +69,14 @@ class PenggunaanProdukController extends Controller
 
     public function update(Request $request)
     {
+        $success = false;
         $data = PenggunaanProduk::find($request->id);       
         DB::beginTransaction();
         try {
             $data->nama = $request->nama;
             $data->keterangan = $request->keterangan;
             if ($data->update()) {
+                $success = true;
                 DB::commit();
             } else {
                 DB::rollback();
@@ -70,6 +84,6 @@ class PenggunaanProdukController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
         }
-        return redirect('/penggunaan-produk')->with('Save','Data Berhasil Disimpan');
+        return response()->json(['success' => $success]);
     }
 }

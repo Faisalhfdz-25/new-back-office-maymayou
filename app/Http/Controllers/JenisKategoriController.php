@@ -9,26 +9,38 @@ use Illuminate\Support\Facades\DB;
 class JenisKategoriController extends Controller
 {
     public function index(){
-        $data = JenisKategori::all();
-        return view('jeniskategori.index',compact('data'));
+        return view('jeniskategori.index');
+    }
+
+    public function getData(){
+        $datas = JenisKategori::all();
+        foreach($datas as $data){
+            $data->nama = $data->nama;
+            $data->keterangan = $data->keterangan;
+            $data->aksi = '<a href="javascript:void(0);" class="btn btn-round mb-1 btn-warning text-charcoal" onclick="edit(' .$data->id. ')"><i class="ti-pencil-alt"></i>Edit</a>';
+            $data->aksi .= '<a href="javascript:void(0);" class="btn btn-round mb-1 btn-danger text-charcoal" onclick="hapus(' .$data->id .')"><i class="ti-trash"></i>Delete</a>';
+        }
+        return response()->json(['data' => $datas]);
     }
 
     public function simpan(Request $request)
     {
         $data = new JenisKategori();        
         DB::beginTransaction();
+        $success = false;
         try {
             $data->nama = $request->nama;
             $data->keterangan = $request->keterangan;
             if ($data->save()) {
                 DB::commit();
+                $success = true;
             } else {
                 DB::rollback();
             }
         } catch (\Throwable $th) {
             DB::rollback();
         }
-        return redirect('/jenis-kategori')->with('Save','Data Berhasil Disimpan');
+        return response()->json(['success' => $success]);
     }
 
     public function hapus(Request $request)
@@ -59,17 +71,19 @@ class JenisKategoriController extends Controller
     {
         $data = JenisKategori::find($request->id);       
         DB::beginTransaction();
+        $success = false;
         try {
             $data->nama = $request->nama;
             $data->keterangan = $request->keterangan;
             if ($data->update()) {
                 DB::commit();
+                $success = true;
             } else {
                 DB::rollback();
             }
         } catch (\Throwable $th) {
             DB::rollback();
         }
-        return redirect('/jenis-kategori')->with('Save','Data Berhasil Disimpan');
+        return response()->json(['success' => $success]);
     }
 }
