@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(SupplierController::class)->group(function () {
         Route::get('/supplier', 'index');
+        Route::get('/supplier/getdata', 'getData');
         Route::post('/supplier/hapus', 'hapus');
         Route::post('/supplier/simpan', 'simpan');
         Route::post('/supplier/update', 'update');
@@ -76,6 +77,7 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(UserController::class)->group(function () {
         Route::get('/user', 'index');
+        Route::get('/user/getdata', 'getData');
         Route::post('/user/delete', 'delete');
         Route::post('/user/store', 'store');
         Route::post('/user/update', 'update');
@@ -84,6 +86,7 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(TokoController::class)->group(function () {
         Route::get('/toko', 'index');
+        Route::get('/toko/getdata', 'getData');
         Route::post('/toko/delete', 'delete');
         Route::post('/toko/store', 'store');
         Route::post('/toko/update', 'update');

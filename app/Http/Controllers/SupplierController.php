@@ -13,14 +13,27 @@ class SupplierController extends Controller
         return view('supplier.index',compact('data'));
     }
 
+    public function getData(){
+        $datas = Supplier::all();
+        foreach($datas as $data){
+            $data->nama = $data->nama;
+            $data->alamat = $data->alamat;
+            $data->aksi = '<a href="javascript:void(0);" class="btn btn-round mb-1 btn-warning text-charcoal" onclick="edit(' .$data->id. ')"><i class="ti-pencil-alt"></i>Edit</a>';
+            $data->aksi .= '<a href="javascript:void(0);" class="btn btn-round mb-1 btn-danger text-charcoal" onclick="hapus(' .$data->id .')"><i class="ti-trash"></i>Delete</a>';
+        }
+        return response()->json(['data' => $datas]);
+    }
+
     public function simpan(Request $request)
     {
         $data = new Supplier();        
         DB::beginTransaction();
+        $success = false;
         try {
             $data->nama = $request->nama;
             $data->alamat = $request->alamat;
             if ($data->save()) {
+                $success = true;
                 DB::commit();
             } else {
                 DB::rollback();
@@ -28,7 +41,7 @@ class SupplierController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
         }
-        return redirect('/supplier')->with('Save','Data Berhasil Disimpan');
+        return response()->json(['success' => $success]);
     }
 
     public function hapus(Request $request)
@@ -59,17 +72,19 @@ class SupplierController extends Controller
     {
         $data = Supplier::find($request->id);       
         DB::beginTransaction();
+        $success = false;
         try {
             $data->nama = $request->nama;
             $data->alamat = $request->alamat;
             if ($data->update()) {
                 DB::commit();
+                $success = true;
             } else {
                 DB::rollback();
             }
         } catch (\Throwable $th) {
             DB::rollback();
         }
-        return redirect('/supplier')->with('Save','Data Berhasil Disimpan');
+        return response()->json(['success' => $success]);
     }
 }

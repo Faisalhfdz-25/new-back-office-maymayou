@@ -27,25 +27,16 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover init-datatable" id="supplier_table">
+                        <table class="table table-bordered table-hover init-datatable" id="toko_table">
                             <thead class="thead-light">
                                 <tr>
+                                    <th width="10">#</th>
                                     <th>Name</th>
                                     <th>Alamat</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $item)
-                                    <tr>
-                                        <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->alamat }}</td>
-                                        <td>
-                                            <a class="btn btn-sm btn-warning" href="javascript:void(0);" onclick="edit('{{ $item->id }}')">Edit</a>
-                                            <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -66,7 +57,7 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" action="{{url('toko/store')}}" novalidate enctype="multipart/form-data">
+                    <form method="post" id="tambah_form" action="{{url('toko/store')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -108,7 +99,7 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" action="{{url('toko/update')}}" novalidate enctype="multipart/form-data">
+                    <form method="post" id="edit_form" action="{{url('toko/update')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -133,7 +124,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary saveButton">Save</button>
                 </form>
             </div>
         </div>
@@ -142,6 +133,118 @@
 @endsection
 @section('script')
     <script>
+
+$(document).ready(function(){
+            getData();
+
+            $('#tambah_form').validate({
+                highlight: function(input) {
+                    $(input).parents('.form-line').addClass('is-invalid');
+                },
+                unhighlight: function(input) {
+                    $(input).parents('.form-line').removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    $('.saveButton').prop('disabled', true);
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
+                        dataType: "json",
+                        success: function(data) {
+                            $('.saveButton').prop('disabled', false);
+                            if (data.success) {
+                                Swal.fire('Selamat!', 'Data Berhasil disimpan!', 'success');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
+                            } else {
+                                Swal.fire('Maaf!', 'Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
+                            }
+                        },
+                        error: function(err) {
+                            $('.saveButton').prop('disabled', false);
+                        }
+                    });
+                }
+            });
+
+            $('#edit_form').validate({
+                highlight: function(input) {
+                    $(input).parents('.form-line').addClass('is-invalid');
+                },
+                unhighlight: function(input) {
+                    $(input).parents('.form-line').removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    $('.saveButton').prop('disabled', true);
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
+                        dataType: "json",
+                        success: function(data) {
+                            $('.saveButton').prop('disabled', false);
+                            if (data.success) {
+                                Swal.fire('Selamat!', 'Perubahan Data Berhasil Disimpan!', 'success');
+                                $('#edit_modal').modal('hide');
+                                getData();
+                            } else {
+                                Swal.fire('Maaf!', 'Perubahan Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
+                                $('#edit_modal').modal('hide');
+                                getData();
+                            }
+                        },
+                        error: function(err) {
+                            $('.saveButton').prop('disabled', false);
+                        }
+                    });
+                }
+            });
+        });
+
+        var toko_table = $('#toko_table').DataTable({
+        responsive: true,
+        processing: true,
+        ajax: "",
+        columns: [{
+                searchable: false,
+                orderable: false,
+                data: null,
+                defaultContent: ''
+            },
+            {
+                data: "nama"
+            },
+            {
+                data: "alamat"
+            },
+            {
+                data: "aksi",
+                class: "text-center"
+            },
+        ]
+    });
+    
+    toko_table.on('order.dt search.dt', function() {
+        toko_table.column(0, {
+            search: 'applied',
+            order: 'applied'
+        }).nodes().each(function(cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+    
+    function getData() {
+        toko_table.ajax.url("{{url('toko/getdata')}}").load(null, false);
+    }
+
+    
         function hapus(id) {
             Swal.fire({
                 title: 'Yakin?',
@@ -163,10 +266,10 @@
                         success: function(data) {
                             if (data) {
                                 Swal.fire('Berhasil!', 'Data Toko berhasil dihapus.', 'success');
-                                location.reload()
+                                getData();
                             } else {
                                 Swal.fire('Gagal!', 'Data Toko gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
-                                location.reload()
+                                getData();
                             }
                         },
                         error: function(err) {
@@ -196,9 +299,4 @@
         });
     }
     </script>
-    @if(session('Save'))
-        <script>
-            Swal.fire('Berhasil!', 'Data Berhasil Berhasil Disimpan.', 'success');
-        </script>
-    @endif
 @endsection

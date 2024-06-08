@@ -76,7 +76,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary saveButton">Save</button>
                 </form>
             </div>
         </div>
@@ -291,9 +291,4 @@
         });
     }
     </script>
-    @if(session('Save'))
-        <script>
-            Swal.fire('Berhasil!', 'Data Berhasil Disimpan.', 'success');
-        </script>
-    @endif
 @endsection

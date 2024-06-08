@@ -10,29 +10,40 @@ class TokoController extends Controller
 {
     public function index()
     {
-        $data = Toko::all();
-        return view('toko.index', compact('data'));
+        return view('toko.index');
+    }
 
+    public function getData(){
+        $datas = Toko::all();
+        foreach($datas as $data){
+            $data->nama = $data->nama;
+            $data->alamat = $data->alamat;
+            $data->aksi = '<a href="javascript:void(0);" class="btn btn-round mb-1 btn-warning text-charcoal" onclick="edit(' .$data->id. ')"><i class="ti-pencil-alt"></i>Edit</a>';
+            $data->aksi .= '<a href="javascript:void(0);" class="btn btn-round mb-1 btn-danger text-charcoal" onclick="hapus(' .$data->id .')"><i class="ti-trash"></i>Delete</a>';
+        }
+        return response()->json(['data' => $datas]);
     }
 
     public function store(Request $request)
     {
         $data = new Toko();
         DB::beginTransaction();
+        $success = false;
         try {
             $data->nama = $request->nama;
             $data->alamat = $request->alamat;
 
             if ($data->save()) {
                 DB::commit();
+                $success = true;
+
             }else{
                 DB::rollback();
             }
         } catch (\Throwable $th) {
             DB::rollback();
         }
-
-        return redirect('/toko')->with('Save', 'Data Berhasil Disimpan');
+        return response()->json(['success' => $success]);
     }
 
     public function delete(Request $request)
@@ -64,11 +75,13 @@ class TokoController extends Controller
     {
         $data = Toko::find($request->id);
         DB::beginTransaction();
+        $success = false;
         try {
             $data->nama = $request->nama;
             $data->alamat = $request->alamat;
 
             if ($data->update()) {
+                $success = true;
                 DB::commit();
             }else{
                 DB::rollback();
@@ -76,7 +89,6 @@ class TokoController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
         }
-
-        return redirect('/toko')->with('Save', 'Data Berhasil Disimpan');
+        return response()->json(['success' => $success]);
     }
 }
