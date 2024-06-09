@@ -117,7 +117,7 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" action="{{url('user/update')}}" novalidate enctype="multipart/form-data">
+                    <form method="post" id="edit_form" action="{{url('user/update')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -140,22 +140,22 @@
                                         <input type="password" class="form-control" name="password" id="password_edit">
                                     </div>
                                 </div>
-                                {{-- <div class="form-group row">
+                                <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Role</label>
                                     <div class="col">
                                         <select class="form-control" name="role_id" id="role_id_edit">
                                             @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                                <option value="{{ $role->id }}">{{ $role->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                </div> --}}
-                                <div class="form-group row">
+                                </div>
+                                {{-- <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Role</label>
                                     <div class="col">
-                                        <input type="password" class="form-control" name="role_id" id="role_id_edit">
+                                        <input type="text" class="form-control" name="role_id" id="role_id_edit">
                                     </div>
-                                </div>
+                                </div> --}}
                             </li>
                         </ul>
                 </div>
@@ -228,11 +228,11 @@
                             $('.saveButton').prop('disabled', false);
                             if (data.success) {
                                 Swal.fire('Selamat!', 'Perubahan Data Berhasil Disimpan!', 'success');
-                                $('#edit_modal').modal('hide');
+                                $('#editModal').modal('hide');
                                 getData();
                             } else {
                                 Swal.fire('Maaf!', 'Perubahan Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
-                                $('#edit_modal').modal('hide');
+                                $('#editModal').modal('hide');
                                 getData();
                             }
                         },

@@ -27,9 +27,10 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover init-datatable" id="supplier_table">
+                        <table class="table table-bordered table-hover init-datatable" id="inventory_table">
                             <thead class="thead-light">
                                 <tr>
+                                    <th width="10">#</th>
                                     <th>Kode</th>
                                     <th>Nama</th>
                                     <th>Jenis | Penggunaan | Kelas</th>
@@ -41,36 +42,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $item)
-                                    <tr>
-                                        <td>{{ $item->kode }}</td>
-                                        <td>{{ $item->nama }}</td>
-                                        <td>{{ $item->jeniskategori->nama }} | {{ $item->penggunaanproduk->nama }} | {{ $item->kelasproduk->nama }}</td>
-                                        <td>{{ $item->merk }}</td>
-                                        <td>{{ $item->supplier->nama }} - {{ $item->supplier->alamat }}</td>
-                                        <td>
-                                            @if ($item->jenis == 9)
-                                                <a class="btn btn-sm btn-info text-charcoal" href="/inventory-list/resep/{{ $item->id }}">Resep</a>
-                                            @else
-                                                {{ $item->harga }}</td>
-                                            @endif
-                                        <td>
-                                            @if ($item->is_produksi == 1)
-                                                <a class="btn btn-sm btn-outline-grape btn-round" href="javascript:void(0);">Produksi</a>
-                                            @endif
-                                            @if ($item->is_toko == 1)
-                                                <a class="btn btn-sm btn-outline-lemon btn-round" href="javascript:void(0);">Toko</a>
-                                            @endif
-                                            @if ($item->is_frozen == 1)
-                                                <a class="btn btn-sm btn-outline-azure btn-round" href="javascript:void(0);">Frozen</a>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-sm btn-warning text-charcoal" href="/inventory-list/editview/{{ $item->id }}"><i class="ti-pencil-alt"></i></a>
-                                            <a class="btn btn-sm btn-danger text-charcoal" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')"><i class="ti-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -91,7 +62,7 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-3">
-                    <form method="post" action="{{url('inventory-list/simpan')}}" novalidate enctype="multipart/form-data">
+                    <form method="post" id="tambah_form" action="{{url('inventory-list/simpan')}}" novalidate enctype="multipart/form-data">
                         @csrf
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
@@ -198,6 +169,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Harga</label>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="harga">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Tempat</label>
                                     <div class="col">
                                         <select class="form-control selectpicker" name="supplier">
@@ -233,6 +212,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Rumus Bagi</label>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="rumus_bagi" placeholder="Khusus Produk May Mayou">
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -249,42 +236,131 @@
 @endsection
 @section('script')
     <script>
+        $(document).ready(function(){
+            getData();
 
-        function hapus(id) {
-            Swal.fire({
-                title: 'Yakin?',
-                text: "Mau menghapus Data ini!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FF2C2C',
-                confirmButtonText: 'Ya, Hapus aja!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+            $('#tambah_form').validate({
+                highlight: function(input) {
+                    $(input).parents('.form-line').addClass('is-invalid');
+                },
+                unhighlight: function(input) {
+                    $(input).parents('.form-line').removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    $('.saveButton').prop('disabled', true);
                     $.ajax({
-                        url: "{{url('inventory-list/hapus')}}",
-                        type: "post",
-                        data: {
-                            _token: '{{csrf_token()}}',
-                            id: id
-                        },
+                        url: form.action,
+                        type: form.method,
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
                         dataType: "json",
                         success: function(data) {
-                            if (data) {
-                                Swal.fire('Berhasil!', 'Data Inventory berhasil dihapus.', 'success');
-                                location.reload()
+                            $('.saveButton').prop('disabled', false);
+                            if (data.success) {
+                                Swal.fire('Selamat!', 'Data Berhasil disimpan!', 'success');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
                             } else {
-                                Swal.fire('Gagal!', 'Data Inventory gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
-                                location.reload()
+                                Swal.fire('Maaf!', 'Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
                             }
                         },
                         error: function(err) {
-                            Swal.fire('Error!', 'Lihat errornya di console.', 'error');
-                            location.reload()
+                            $('.saveButton').prop('disabled', false);
                         }
                     });
                 }
-            })
-        }
+            });
+
+        });
+
+        var inventory_table = $('#inventory_table').DataTable({
+        responsive: true,
+        processing: true,
+        ajax: "",
+        columns: [{
+                searchable: false,
+                orderable: false,
+                data: null,
+                defaultContent: ''
+            },
+            {
+                data: "kode"
+            },
+            {
+                data: "nama"
+            },
+            {
+                data: "jenis"
+            },
+            {
+                data: "merk"
+            },
+            {
+                data: "tempat"
+            },
+            {
+                data: "harga"
+            },
+            {
+                data: "penyaluran"
+            },
+            {
+                data: "aksi",
+                class: "text-center"
+            },
+        ]
+    });
+    
+    inventory_table.on('order.dt search.dt', function() {
+        inventory_table.column(0, {
+            search: 'applied',
+            order: 'applied'
+        }).nodes().each(function(cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+    
+    function getData() {
+        inventory_table.ajax.url("{{url('inventory-list/getdata')}}").load(null, false);
+    }
+    function hapus(id) {
+        Swal.fire({
+            title: 'Yakin?',
+            text: "Mau menghapus Data ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#FF2C2C',
+            confirmButtonText: 'Ya, Hapus aja!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{url('inventory-list/hapus')}}",
+                    type: "post",
+                    data: {
+                        _token: '{{csrf_token()}}',
+                        id: id
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if (data) {
+                            Swal.fire('Berhasil!', 'Data Inventory berhasil dihapus.', 'success');
+                            getData();
+                        } else {
+                            Swal.fire('Gagal!', 'Data Inventory gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
+                            getData();
+                        }
+                    },
+                    error: function(err) {
+                        Swal.fire('Error!', 'Lihat errornya di console.', 'error');
+                        location.reload()
+                    }
+                });
+            }
+        })
+    }
     
     </script>
     @if(session('Save'))

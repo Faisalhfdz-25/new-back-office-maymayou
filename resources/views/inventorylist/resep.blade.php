@@ -19,31 +19,31 @@
             <!-- BOF General Form -->
             <div class="col-lg-12">
                 <div class="card mb-3">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Kode</label>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <input type="hidden" class="form-control" name="id" value="{{ $data->id }}">
-                                            <input type="text" class="form-control" name="kode" value="{{ $data->kode }}" @readonly(true)>
-                                        </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label">Kode</label>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <input type="hidden" class="form-control" name="id" id="data_id" value="{{ $data->id }}">
+                                        <input type="text" class="form-control" name="kode" value="{{ $data->kode }}" @readonly(true)>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Nama</label>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" name="nama" value="{{ $data->nama }}"@readonly(true)>
-                                        </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label">Nama</label>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="nama" value="{{ $data->nama }}"@readonly(true)>
                                     </div>
                                 </div>
-                                
-                            </li>
-                        </ul>
-                    </div>
+                            </div>
+                            
+                        </li>
+                    </ul>
                 </div>
             </div>
+            
             <div class="col-lg-12">
                 <div class="card mb-3">
                     <div class="card-header">
@@ -56,9 +56,10 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover init-datatable" id="supplier_table">
+                            <table class="table table-bordered table-hover init-datatable" id="resep_table">
                                 <thead class="thead-light">
                                     <tr>
+                                        <th width="10">#</th>
                                         <th>Nama</th>
                                         <th>Satuan</th>
                                         <th>QTY</th>
@@ -67,35 +68,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                        $hpp = 0;
-                                    @endphp
-                                    @foreach ($resep as $item)
-                                        <tr>
-                                            <td>{{ $item->inventory->nama }}</td>
-                                            <td>{{ $item->satuan_produksi }}</td>
-                                            <td>{{ $item->qty }}</td>
-                                            @php
-                                                $harga = $item->inventory->harga / $item->inventory->qty_min_stok;
-                                                $total = $item->qty * $harga;
-                                                $hpp = $hpp + $total;
-                                            @endphp
-                                            <td>Rp. {{ number_format($total) }}</td>
-                                            <td>
-                                                <a class="btn btn-sm btn-danger" href="javascript:void(0);" onclick="hapus('{{ $item->id }}')">Delete</a><br>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    <tr>
-                                        <td colspan="3" align="right">Total HPP</td>
-                                        <td>Rp. {{ number_format($hpp) }}</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3" align="right">HPP Per Item</td>
-                                        <td>Rp. {{ number_format($hpp / $data->rumus_bagi) }}</td>
-                                        <td></td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -116,14 +88,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="card mb-3">
-                        <form method="post" action="{{url('inventory-list/resep/simpan')}}" novalidate enctype="multipart/form-data">
+                        <form method="post" id="tambah_form" action="{{url('inventory-list/resep/simpan')}}" novalidate enctype="multipart/form-data">
                             @csrf
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
                                     <div class="form-group row">
                                         <label class="col-md-3 col-form-label">Inventory List</label>
                                         <div class="col">
-                                            <input type="hidden" class="form-control" name="id_produk" value="{{ $data->id }}">
+                                            <input type="hidden" class="form-control" name="id_produk" value="99">
                                             <select class="form-control selectpicker" name="id_inventory">
                                                 @foreach ($inventory as $item)
                                                     <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -146,7 +118,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary saveButton">Save</button>
                     </form>
                 </div>
             </div>
@@ -155,47 +127,111 @@
 @endsection
 @section('script')
     <script>
+        $(document).ready(function(){
+            getData();
 
-        function hapus(id) {
-            Swal.fire({
-                title: 'Yakin?',
-                text: "Mau menghapus Data ini!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FF2C2C',
-                confirmButtonText: 'Ya, Hapus aja!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+            $('#tambah_form').validate({
+                highlight: function(input) {
+                    $(input).parents('.form-line').addClass('is-invalid');
+                },
+                unhighlight: function(input) {
+                    $(input).parents('.form-line').removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    $('.saveButton').prop('disabled', true);
                     $.ajax({
-                        url: "{{url('inventory-list/resep/hapus')}}",
-                        type: "post",
-                        data: {
-                            _token: '{{csrf_token()}}',
-                            id: id
-                        },
+                        url: form.action,
+                        type: form.method,
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
                         dataType: "json",
                         success: function(data) {
-                            if (data) {
-                                Swal.fire('Berhasil!', 'Data Inventory berhasil dihapus.', 'success');
-                                location.reload()
+                            $('.saveButton').prop('disabled', false);
+                            if (data.success) {
+                                $('#exampleModalSize').modal('hide');
+                                getData();
                             } else {
-                                Swal.fire('Gagal!', 'Data Inventory gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
-                                location.reload()
+                                Swal.fire('Maaf!', 'Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
                             }
                         },
                         error: function(err) {
-                            Swal.fire('Error!', 'Lihat errornya di console.', 'error');
-                            location.reload()
+                            $('.saveButton').prop('disabled', false);
                         }
                     });
                 }
-            })
-        }
+            });
+        });
+
+        var resep_table = $('#resep_table').DataTable({
+        responsive: true,
+        processing: true,
+        ajax: "",
+        columns: [{
+                searchable: false,
+                orderable: false,
+                data: null,
+                defaultContent: ''
+            },
+            {
+                data: "nama"
+            },
+            {
+                data: "satuan"
+            },
+            {
+                data: "qty"
+            },
+            {
+                data: "harga"
+            },
+            {
+                data: "aksi",
+                class: "text-center"
+            },
+        ]
+    });
+    
+    resep_table.on('order.dt search.dt', function() {
+        resep_table.column(0, {
+            search: 'applied',
+            order: 'applied'
+        }).nodes().each(function(cell, i) {
+            cell.innerHTML = i + 1;
+        });
+    }).draw();
+    
+    function getData() {
+        var id = "{{url('inventory-list/getdataresep')}}" + "/" + document.getElementById("data_id").value;
+        resep_table.ajax.url(id).load(null, false);
+    }
+
+
+    function hapus(id) {
+        $.ajax({
+            url: "{{url('inventory-list/resep/hapus')}}",
+            type: "post",
+            data: {
+                _token: '{{csrf_token()}}',
+                id: id
+            },
+            dataType: "json",
+            success: function(data) {
+                if (data) {
+                    getData();
+                } else {
+                    Swal.fire('Gagal!', 'Data Inventory gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.', 'error');
+                    getData();
+                }
+            },
+            error: function(err) {
+                Swal.fire('Error!', 'Lihat errornya di console.', 'error');
+                location.reload()
+            }
+        });
+    }
     
     </script>
-    @if(session('Save'))
-        <script>
-            Swal.fire('Berhasil!', 'Data Berhasil Disimpan.', 'success');
-        </script>
-    @endif
 @endsection

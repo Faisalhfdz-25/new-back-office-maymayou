@@ -79,6 +79,7 @@ class UserController extends Controller
     {
         $data = User::find($request->id);
         DB::beginTransaction();
+        $success = false;
         try {
             $data->name = $request->name;
             $data->email = $request->email;
@@ -88,13 +89,14 @@ class UserController extends Controller
             $data->role_id = $request->role_id;
             if ($data->update()) {
                 DB::commit();
+                $success = true;
             }else{
                 DB::rollback();
             }
         } catch (\Throwable $th) {
             DB::rollback();
         }
+        return response()->json(['success' => $success]);
 
-        return redirect('/user')->with('Save', 'Data Berhasil disimpan');
     }
 }

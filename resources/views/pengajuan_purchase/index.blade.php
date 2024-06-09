@@ -16,7 +16,7 @@
         <!-- EOF Breadcrumb -->
 
         <!-- BOF MAIN-BODY -->
-        <div class="container">
+        
             <div class="row">
                 <!-- Form Kode -->
                 <div class="col-lg-12">
@@ -28,7 +28,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Kode</label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" name="kode"
+                                        <input type="text" class="form-control" id="kode" name="kode"
                                             value="{{ $kode }}" readonly>
                                     </div>
                                 </div>
@@ -37,13 +37,6 @@
                                     <div class="col-md-9">
                                         <input type="text" class="form-control" name="tanggal"
                                             value="{{ $tanggal }}" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3 col-form-label">Total</label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control" name="total"
-                                            value="{{ $total }}" readonly>
                                     </div>
                                 </div>
                                 <hr>
@@ -70,9 +63,10 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover init-datatable" id="supplier_table">
+                                <table class="table table-bordered table-hover init-datatable" id="detail_table">
                                     <thead class="thead-light">
                                         <tr>
+                                            <th width="10">#</th>
                                             <th>Nama Barang</th>
                                             <th>Qty</th>
                                             <th>Harga</th>
@@ -83,29 +77,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($detail as $item)
-                                            <tr>
-
-                                                <td>{{ $item->inventory->nama }}</td>
-                                                <td>{{ $item->qty }}</td>
-                                                <td>{{ $item->harga }}</td>
-                                                <td>{{ $item->supplier->nama }}</td>
-                                                <td>{{ $item->sub_total }}</td>
-                                                <td>
-                                                    @if ($item->acc == 0)
-                                                        <button class="btn btn-sm btn-info">Draft</button>
-                                                    @elseif($item->acc == 1)
-                                                        <button class="btn btn-sm btn-success">Disetujui</button>
-                                                    @elseif($item->acc == 2)
-                                                        <button class="btn btn-sm btn-danger">Tidak Disetujui</button>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-sm btn-danger" href="javascript:void(0);"
-                                                        onclick="hapus('{{ $item->id }}')">Delete</a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -113,10 +84,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-
         <!-- EOF MAIN-BODY -->
     </div>
+    
     <div class="modal fade" id="exampleModalSize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -129,24 +99,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="card mb-3">
-                        <form method="post" action="{{ url('pengajuan-purchase/simpan') }}" novalidate
-                            enctype="multipart/form-data">
+                        <form method="post" id="tambah_form" action="{{ url('pengajuan-purchase/simpan') }}" novalidate enctype="multipart/form-data">
                             @csrf
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Kode</label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control" name="kode"
-                                                value="{{ $kode }}" readonly>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="form-group row">
                                         <label class="col-md-3 col-form-label">Inventory List</label>
                                         <div class="col">
-                                            {{-- <input type="number" class="form-control" name="id_inventory" value="{{ $inventory->id }}"> --}}
-                                            <select class="form-control selectpicker" id="inventoryList"
-                                                name="id_inventory">
+                                            <input type="hidden" class="form-control" name="kode" value="{{ $kode }}" readonly>
+                                            <select class="form-control selectpicker" id="inventoryList" name="id_inventory">
                                                 <option value="" selected disabled>Pilih Inventory</option>
                                                 @foreach ($inventory as $item)
                                                     <option value="{{ $item->id }}" data-harga="{{ $item->harga }}"
@@ -158,23 +120,17 @@
                                     <div class="form-group row">
                                         <label class="col-md-3 col-form-label">Harga</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" name="harga" id="harga"
-                                                readonly>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
+                                            <input type="text" class="form-control" name="harga" id="harga" readonly>
+                                            <input type="hidden" ass="form-control" name="tempat" id="tempat" readonly>
 
-                                        <div class="col-md-9">
-                                            <input type="hidden" ass="form-control" name="tempat" id="tempat"
-                                                readonly>
                                         </div>
                                     </div>
+
                                     <div class="form-group row">
                                         <label class="col-md-3 col-form-label">QTY</label>
                                         <div class="col">
                                             <div class="input-group">
-                                                <input type="number" class="form-control" id="qty"
-                                                    name="qty">
+                                                <input type="number" class="form-control" id="qty" name="qty">
                                             </div>
                                         </div>
                                     </div>
@@ -182,8 +138,7 @@
                                         <label class="col-md-3 col-form-label">Sub Total</label>
                                         <div class="col">
                                             <div class="input-group">
-                                                <input type="number" class="form-control" id="sub_total"
-                                                    name="sub_total" readonly>
+                                                <input type="number" class="form-control" id="sub_total" name="sub_total" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -193,17 +148,18 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary saveButton">Save</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
 @endsection
 @section('script')
     <script>
         $(document).ready(function() {
-
+            getData();
             function calculateSubtotal() {
                 var harga = parseFloat($('#harga').val()) || 0;
                 var qty = parseInt($('#qty').val()) || 0;
@@ -228,49 +184,121 @@
             $('#qty').on('input', function() {
                 calculateSubtotal();
             });
-        });
 
-        function hapus(id) {
-            Swal.fire({
-                title: 'Yakin?',
-                text: "Mau menghapus Data ini!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FF2C2C',
-                confirmButtonText: 'Ya, Hapus aja!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+            $('#tambah_form').validate({
+                highlight: function(input) {
+                    $(input).parents('.form-line').addClass('is-invalid');
+                },
+                unhighlight: function(input) {
+                    $(input).parents('.form-line').removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
+                    $('.saveButton').prop('disabled', true);
                     $.ajax({
-                        url: "{{ url('inventory-list/resep/hapus') }}",
-                        type: "post",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            id: id
-                        },
+                        url: form.action,
+                        type: form.method,
+                        data: new FormData(form),
+                        processData: false,
+                        contentType: false,
                         dataType: "json",
                         success: function(data) {
-                            if (data) {
-                                Swal.fire('Berhasil!', 'Data Inventory berhasil dihapus.', 'success');
-                                location.reload();
+                            $('.saveButton').prop('disabled', false);
+                            if (data.success) {
+                                $('#exampleModalSize').modal('hide');
+                                getData();
                             } else {
-                                Swal.fire('Gagal!',
-                                    'Data Inventory gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.',
-                                    'error');
-                                location.reload();
+                                Swal.fire('Maaf!', 'Data Gagal disimpan, silahkan coba beberapa saat lagi!', 'error');
+                                $('#exampleModalSize').modal('hide');
+                                getData();
                             }
                         },
                         error: function(err) {
-                            Swal.fire('Error!', 'Lihat errornya di console.', 'error');
-                            location.reload();
+                            $('.saveButton').prop('disabled', false);
                         }
                     });
                 }
-            })
+            });
+
+        });
+
+            var detail_table = $('#detail_table').DataTable({
+            responsive: true,
+            processing: true,
+            ajax: "",
+            columns: [{
+                    searchable: false,
+                    orderable: false,
+                    data: null,
+                    defaultContent: ''
+                },
+                {
+                    data: "nama"
+                },
+                {
+                    data: "qty"
+                },
+                {
+                    data: "harga"
+                },
+                {
+                    data: "tempat"
+                },
+                {
+                    data: "subtotal"
+                },
+                {
+                    data: "status"
+                },
+                {
+                    data: "aksi",
+                    class: "text-center"
+                },
+            ]
+        });
+    
+        detail_table.on('order.dt search.dt', function() {
+            detail_table.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+        
+        function getData() {
+            var id = "{{url('pengajuan-purchase/getdatadetail')}}" + "/" + document.getElementById("kode").value;
+            detail_table.ajax.url(id).load(null, false);
+        }
+
+        function hapus(id) {
+            $.ajax({
+                url: "{{ url('pengajuan-purchase/delete') }}",
+                type: "post",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: id
+                },
+                dataType: "json",
+                success: function(data) {
+                    if (data) {
+                        getData();
+                    } else {
+                        Swal.fire('Gagal!',
+                            'Data gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.',
+                            'error');
+                        getData();
+                    }
+                },
+                error: function(err) {
+                    Swal.fire('Error!', 'Lihat errornya di console.', 'error');
+                    location.reload();
+                }
+            });
         }
     </script>
     @if (session('Save'))
         <script>
-            Swal.fire('Berhasil!', 'Data Berhasil Berhasil Disimpan.', 'success');
+            Swal.fire('Berhasil!', 'Data Berhasil Disimpan.', 'success');
         </script>
     @endif
 

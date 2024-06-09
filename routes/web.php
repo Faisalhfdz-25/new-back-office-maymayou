@@ -30,11 +30,13 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(InventoryListController::class)->group(function () {
         Route::get('/inventory-list', 'index');
+        Route::get('/inventory-list/getdata', 'getData');
         Route::post('/inventory-list/hapus', 'hapus');
         Route::post('/inventory-list/simpan', 'simpan');
         Route::get('/inventory-list/editview/{id}', 'editview');
         Route::post('/inventory-list/update', 'update');
         Route::get('/inventory-list/resep/{id}', 'resep');
+        Route::get('/inventory-list/getdataresep/{id}', 'getDataResep');
         Route::post('/inventory-list/resep/simpan', 'simpanresep');
         Route::post('/inventory-list/resep/hapus', 'hapusresep');
     });
@@ -124,11 +126,17 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(PengajuanPurchaseController::class)->group(function () {
         Route::get('/pengajuan-purchase', 'purchase');
+        Route::get('/pengajuan-purchase/getdata', 'getData');
         Route::get('/pengajuan-purchase-tambah', 'index');
-        Route::get('/pengajuan-purchase-setujui/{id}', 'setujui');
-        Route::get('/pengajuan-purchase-acc/{id}/{status}', 'acc');
-        Route::get('/pengajuan-purchase-detail/{id}', 'detail');
-        Route::post('/pengajuan-purchase/simpan', 'simpan');
+        Route::get('/pengajuan-purchase/getdatadetail/{kode}', 'getDataDetail');
         Route::post('/pengajuan-purchase/ajukan', 'ajukan');
+        Route::post('/pengajuan-purchase/simpan', 'simpan');
+        Route::post('/pengajuan-purchase/delete', 'delete');
+        
+        Route::get('/pengajuan-purchase-detail/{id}', 'detail');
+        Route::get('/pengajuan-purchase/getdetailperif/{kode}', 'getdetailperif');
+        Route::post('/pengajuan-purchase-acc', 'acc');
+
+        Route::post('/pengajuan-purchase-setujui', 'setujui');
     });
 });

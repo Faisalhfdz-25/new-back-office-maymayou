@@ -28,9 +28,10 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover init-datatable" id="supplier_table">
+                                <table class="table table-bordered table-hover init-datatable" id="pengajuan_table">
                                     <thead class="thead-light">
                                         <tr>
+                                            <th width="10">#</th>
                                             <th>Kode</th>
                                             <th>Tanggal</th>
                                             <th>Total Item</th>
@@ -40,26 +41,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $item)
-                                            <tr>
-                                                <td>{{ $item->kode }}</td>
-                                                <td>{{ $item->tanggal }}</td>
-                                                <td>{{ $item->total_item }}</td>
-                                                <td>{{ $item->total_payment }}</td>
-                                                <td>
-                                                    @if ($item->acc == 0)
-                                                        Pengajuan Baru
-                                                    @elseif($item->acc == 1)
-                                                        Dalam Proses
-                                                    @elseif($item->acc == 2)
-                                                        Selesai    
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-sm btn-info" href="/pengajuan-purchase-detail/{{ $item->id }}">Detail</a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -73,70 +54,53 @@
 @endsection
 @section('script')
     <script>
-        $(document).ready(function() {
-
-            function calculateSubtotal() {
-                var harga = parseFloat($('#harga').val()) || 0;
-                var qty = parseInt($('#qty').val()) || 0;
-                var subtotal = harga * qty;
-                $('#sub_total').val(subtotal);
-            }
-
-
-            $('#inventoryList').change(function() {
-                var selectedOption = $(this).find('option:selected');
-                var harga = selectedOption.data('harga');
-                var tempat = selectedOption.data('tempat');
-
-                $('#harga').val(harga);
-                $('#tempat').val(tempat);
-
-
-                calculateSubtotal();
-            });
-
-
-            $('#qty').on('input', function() {
-                calculateSubtotal();
-            });
+       $(document).ready(function(){
+            getData();
         });
 
-        function hapus(id) {
-            Swal.fire({
-                title: 'Yakin?',
-                text: "Mau menghapus Data ini!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FF2C2C',
-                confirmButtonText: 'Ya, Hapus aja!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "{{ url('inventory-list/resep/hapus') }}",
-                        type: "post",
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            id: id
-                        },
-                        dataType: "json",
-                        success: function(data) {
-                            if (data) {
-                                Swal.fire('Berhasil!', 'Data Inventory berhasil dihapus.', 'success');
-                                location.reload();
-                            } else {
-                                Swal.fire('Gagal!',
-                                    'Data Inventory gagal dihapus, silahkan refresh halaman ini kemudian coba lagi.',
-                                    'error');
-                                location.reload();
-                            }
-                        },
-                        error: function(err) {
-                            Swal.fire('Error!', 'Lihat errornya di console.', 'error');
-                            location.reload();
-                        }
-                    });
-                }
-            })
+        var pengajuan_table = $('#pengajuan_table').DataTable({
+            responsive: true,
+            processing: true,
+            ajax: "",
+            columns: [{
+                    searchable: false,
+                    orderable: false,
+                    data: null,
+                    defaultContent: ''
+                },
+                {
+                    data: "kode"
+                },
+                {
+                    data: "tanggal"
+                },
+                {
+                    data: "item"
+                },
+                {
+                    data: "total"
+                },
+                {
+                    data: "status"
+                },
+                {
+                    data: "aksi",
+                    class: "text-center"
+                },
+            ]
+        });
+    
+        pengajuan_table.on('order.dt search.dt', function() {
+            pengajuan_table.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function(cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+        
+        function getData() {
+            pengajuan_table.ajax.url("{{url('pengajuan-purchase/getdata')}}").load(null, false);
         }
     </script>
     @if (session('Save'))

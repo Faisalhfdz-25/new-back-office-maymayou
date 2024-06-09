@@ -127,6 +127,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Harga</label>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="harga" value="{{ $data->harga }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Tempat</label>
                                     <div class="col">
                                         <select class="form-control selectpicker" name="supplier">
@@ -162,6 +170,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 col-form-label">Rumus Bagi</label>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="rumus_bagi" value="{{ $data->rumus_bagi }}">
+                                        </div>
+                                    </div>
+                                </div>
                                 <button type="submit" class="btn btn-primary float-right">Save</button>
                             </form>
                             </li>
@@ -170,7 +186,6 @@
                 </div>
             </div>
         </div>
-        <!-- EOF MAIN-BODY -->
 
     </div>
 @endsection

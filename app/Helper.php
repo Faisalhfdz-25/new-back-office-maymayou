@@ -12,7 +12,7 @@ function satuan()
         'Pcs' => 'Pcs',
         'Pack' => 'Pack',
         'Bottle' => 'Bottle',
-        'Box' => 'Box'
+        'Box' => 'Box',
     ];
 }
 

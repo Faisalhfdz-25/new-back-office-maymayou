@@ -209,27 +209,27 @@
         });
 
         var toko_table = $('#toko_table').DataTable({
-        responsive: true,
-        processing: true,
-        ajax: "",
-        columns: [{
-                searchable: false,
-                orderable: false,
-                data: null,
-                defaultContent: ''
-            },
-            {
-                data: "nama"
-            },
-            {
-                data: "alamat"
-            },
-            {
-                data: "aksi",
-                class: "text-center"
-            },
-        ]
-    });
+            responsive: true,
+            processing: true,
+            ajax: "",
+            columns: [{
+                    searchable: false,
+                    orderable: false,
+                    data: null,
+                    defaultContent: ''
+                },
+                {
+                    data: "nama"
+                },
+                {
+                    data: "alamat"
+                },
+                {
+                    data: "aksi",
+                    class: "text-center"
+                },
+            ]
+        });
     
     toko_table.on('order.dt search.dt', function() {
         toko_table.column(0, {
